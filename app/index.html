@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>OAuth2.0 Implicit Test Client</title>
+
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="lib/jquery.min.js"></script>
+		<script src="lib/bootstrap.min.js"></script>
+
+		<script src="app.js"></script>
+		<!--script src="../dist/cajso.min.js"></script-->
+		<script src="js/require.js"></script>
+		
+		<script type="text/javascript"> 
+			var jsoClient;
+			var profileId = "mag";
+			//--- Initialize the jsoClient with MAG configurations from configURL ---//
+			function initialize()
+			{
+				require(["../dist/cajso.min"], function(CAJSOC) {
+				jsoClient = new CAJSOC();
+				//--- If empty configURL, search fallsback to ./msso_config.json ---//
+				var configURL = "";
+				// Get the OAuth related config params and prepare a configMap 
+				getOAuthParams("msso-config.json", profileId);
+				//jsoClient.init(configURL);
+				var p = jsoClient.init();
+				p.then((msg) => {console.log(msg);}, (msg) => {console.log(msg);});
+			
+				//-----------hide the tables ------------//
+				document.getElementById('getContainer').style.visibility= "hidden";
+				document.getElementById('postContainer').style.visibility= "hidden";
+				document.getElementById('putContainer').style.visibility= "hidden";
+				document.getElementById('patchContainer').style.visibility= "hidden";
+				document.getElementById('deleteContainer').style.visibility= "hidden";
+				});
+			}
+			//----------- Start off the authorization process ------------//
+			function authorize() {
+				var configMap;
+				configMap = {
+					client_id : configuration.client_id,
+					client_secret: configuration.client_secret,
+					redirect_uri : configuration.redirect_uri,
+					auth_url : configuration.authorization,
+					scope : configuration.scope,
+					state : configuration.state
+				}
+				jsoClient.authorize("mag", configMap);
+			}
+			//----------- Invoke a protected API using jsoClient -----------//
+			function invokeProtectedAPI() {
+				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
+				var hdrs = [];
+				var params;
+				document.getElementById('getContainer').style.visibility= "visible";
+				document.getElementById('postContainer').style.visibility= "hidden";
+				document.getElementById('putContainer').style.visibility= "hidden";
+				document.getElementById('patchContainer').style.visibility= "hidden";
+				document.getElementById('deleteContainer').style.visibility= "hidden";
+				jsoClient.get(apiURL, hdrs, params, profileId).then(
+					//---- SUCCESS Callback ----//
+					function(data){
+						//---- Handle data ----//
+                    	$("#GetTable tr").remove();
+	                    var trHTML = '';
+	                    var arr = $.map(data.data, function(el) { return el; });       
+	                    trHTML += '<tr>';                                         
+	        			$.each(arr,function(d,item){
+	                        trHTML += '<td>' + item + '</td>';
+	                    });
+	                    trHTML += '</tr>';                                         
+	                    $('#GetTable').append(trHTML);
+
+	                    console.log("State:" + jsoClient.getState(profileId));
+					}, 
+					//---- FAILURE Callback----//
+					function(err){
+						//---- Handle error ----//
+						$("#tableHeader").remove();
+						$("#GetTable tr").remove();
+						var trHTML = '<tr> <td>' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '<tr> <td>';
+						$('#GetTable').append(trHTML);
+					});
+
+
+			}
+			function postDataToProtectedAPI() 
+			{
+				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
+				var hdrs = [];
+				var params;
+				document.getElementById('getContainer').style.visibility= "hidden";
+				document.getElementById('postContainer').style.visibility= "visible";
+				document.getElementById('putContainer').style.visibility= "hidden";
+				document.getElementById('patchContainer').style.visibility= "hidden";
+				document.getElementById('deleteContainer').style.visibility= "hidden";
+				var postData = document.getElementById('fd').value;		
+				jsoClient.post(apiURL, hdrs, params, profileId, postData).then(
+					//---- SUCCESS Callback ----//
+					function(data){
+						//---- Handle data ----//
+						$("#postid").remove();
+						var trHTML = '';
+						trHTML = '<p id="postid">POST data response is <b>' + data.httpStatus + '</b></p>';
+						$('#postContainer').append(trHTML);
+					}, 
+					//---- FAILURE Callback----//
+					function(err){
+						//---- Handle error ----//
+						$("#postid").remove();
+						var trHTML = '<p id="postid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#postContainer').append(trHTML);
+					});
+			}
+			function putDataToProtectedAPI() 
+			{
+				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
+				var hdrs = [];
+				var params;
+				document.getElementById('getContainer').style.visibility= "hidden";
+				document.getElementById('postContainer').style.visibility= "hidden";
+				document.getElementById('putContainer').style.visibility= "visible";
+				document.getElementById('patchContainer').style.visibility= "hidden";
+				document.getElementById('deleteContainer').style.visibility= "hidden";
+				var putData = document.getElementById('fd').value;		
+				jsoClient.put(apiURL, hdrs,params, profileId, putData).then(
+					//---- SUCCESS Callback ----//
+					function(data){
+						//---- Handle data ----//
+                    	$("#putid").remove();
+						var trHTML = '';
+						trHTML = '<p id="putid">PUT data response is <b>' + data.httpStatus + '</b></p>';
+						$('#putContainer').append(trHTML);
+					}, 
+					//---- FAILURE Callback----//
+					function(err){
+						//---- Handle error ----//
+						$("#putid").remove();
+						var trHTML = '<p id="putid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#putContainer').append(trHTML);
+					});
+			}
+			function patchDataToProtectedAPI() 
+			{
+				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
+				var hdrs = [];
+				var params;
+				document.getElementById('getContainer').style.visibility= "hidden";
+				document.getElementById('postContainer').style.visibility= "hidden";
+				document.getElementById('putContainer').style.visibility= "hidden";
+				document.getElementById('patchContainer').style.visibility= "visible";
+				document.getElementById('deleteContainer').style.visibility= "hidden";
+				var patchData = document.getElementById('fd').value;		
+				jsoClient.patch(apiURL, hdrs,params, profileId, patchData).then(
+					//---- SUCCESS Callback ----//
+					function(data){
+						//---- Handle data ----//
+                    	$("#patchid").remove();
+						var trHTML = '';
+						trHTML = '<p id="patchid">PATCH data response is <b>' + data.httpStatus + '</b></p>';
+						$('#patchContainer').append(trHTML);
+					}, 
+					//---- FAILURE Callback----//
+					function(err){
+						//---- Handle error ----//
+						$("#patchid").remove();
+						var trHTML = '<p id="patchid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#patchContainer').append(trHTML);
+					});
+			}
+			function deleteDataFromProtectedAPI() 
+			{
+				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
+				var hdrs = [];
+				var params;
+				document.getElementById('getContainer').style.visibility= "hidden";
+				document.getElementById('postContainer').style.visibility= "hidden";
+				document.getElementById('putContainer').style.visibility= "hidden";
+				document.getElementById('patchContainer').style.visibility= "hidden";
+				document.getElementById('deleteContainer').style.visibility= "visible";
+				
+				jsoClient.delete(apiURL, hdrs,params, profileId).then(
+					//---- SUCCESS Callback ----//
+					function(data){
+						//---- Handle data ----//
+                    	$("#deleteid").remove();
+						var trHTML = '';
+						trHTML = '<p id="deleteid">DELETE data response is <b>' + data.httpStatus + '</b></p>';
+						$('#deleteContainer').append(trHTML);
+					}, 
+					//---- FAILURE Callback----//
+					function(err){
+						//---- Handle error ----//
+						$("#deleteid").remove();
+						var trHTML = '<p id="deleteid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#deleteContainer').append(trHTML);
+					});
+			}
+			
+			function removeToken ()
+			{
+				var revokeConfigMap;
+				revokeConfigMap = {
+					client_id : configuration.client_id,
+					profileId : configuration.profileId,
+					revokeTokenUrl : configuration.tokenRevoke
+				}
+				jsoClient.revokeToken(revokeConfigMap).then (
+					function(data) {console.log(data.httpStatus)},
+					function(err) {console.log(err.httpStatus)}
+					);
+			}
+		</script>		
+
+	</head>
+
+	<body onload='javascript:initialize();'>
+		<!-- Layout -->
+		<div id="menubkg">
+		</div>
+		<div id="wrapper">
+			<div id="container">
+				<div id="content">
+					<div id="content_landing_page">
+						<div class="view view-products3 view-id-products3 view-display-id-page_1 view-dom-id-1">
+							<div class="container">
+								<div class="title-box">
+									<h1>OAuth2.0 - Implicit Test Client Flow Demo</h1>
+									<br />
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="container" >
+						<p>In the implicit flow, instead of issuing the client an authorization code, the client is issued an access token directly (as the result of the resource owner authorization using redirects). Implicit grants improve the responsiveness and efficiency of some clients (such as a client implemented as an in-browser application), since it reduces the number of round trips required to obtain an access token.</p>
+						<p>This client is going to request an OAuth 2.0 access_token.</p>
+						<p>The client is using the <b>response_type=token</b></p>
+						<p>For any more details please refer to this website: <a href="http://tools.ietf.org/html/rfc6749" target="_blank">http://tools.ietf.org/html/rfc6749</a></p>
+						</br>
+						<p>Following table describes what function each of the below button performs -:
+						<table class="table">
+							<tbody>
+							  <tr class="success">
+								<td><b>Authorize</b></td>
+								<td>Starts off the user authorization process with any specific profile via re-direct to the configured authorization URL. At the end of the process it will redirect user back to the redirect_uri with access_token/error set in the fragment as a parameter. </td>
+							  </tr>
+							  <tr class="success">
+								<td><b>Access API</b></td>
+								<td>Performs a HTTP request(based on selection from the dropdown) to an API for a specific profile and displays the response below</td>
+							  </tr>
+							  <tr class="success">
+								<td><b>Remove Token</b></td>
+								<td>Clears the access token from the local storage</td>
+							  </tr>
+							</tbody>
+						</table>
+						<div class="form-group">
+							<label for="fd">Enter data for POST/PUT/PATCH request:</label>
+							<input type="input" class="form-control" id="fd">
+						</div>
+						<table class="table">
+							<tr>
+							<td><input type='button' class="btn btn-primary" name='authorize' value='Authorize' onclick='authorize();'/></td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="form-control btn btn-primary dropdown-toggle" data-toggle="dropdown">
+										Access API <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li><input type='button' class="btn btn-primary" name='get' value='GET' onclick='javascript:invokeProtectedAPI();'/></li>
+										<li><input type='button' class="btn btn-primary" name='post' value='POST' onclick='javascript:postDataToProtectedAPI();'/></li>
+										<li><input type='button' class="btn btn-primary" name='put' value='PUT' onclick='javascript:putDataToProtectedAPI();'/></li>
+										<li><input type='button' class="btn btn-primary" name='patch' value='PATCH' onclick='javascript:patchDataToProtectedAPI();'/></li>
+										<li><input type='button' class="btn btn-primary" name='delete' value='DELETE' onclick='javascript:deleteDataFromProtectedAPI();'/></li>
+									</ul>
+								</div>
+							</td>
+							<td><input type='button' class="btn btn-primary" name='clearToken' value='Remove Token' onclick='javascript:removeToken();'/></td>
+							</tr>
+						</table>					
+						<div class="container"  id="getContainer">				
+							<table class="table" >
+								<thead id="tableHeader">
+								  <tr>
+									<th>Client ID</th>
+									<th>Subscriber ID</th>
+									<th>Scope</th>
+									<th>Expires At</th>
+									<th>Accessed At</th>
+								  </tr>								  
+								</thead>								
+								<tbody id="GetTable">
+								
+								</tbody>
+							</table>
+						</div>
+						<div class="container" id="postContainer">
+						</div>
+						<div class="container" id="putContainer">
+						</div>
+						<div class="container" id="patchContainer">
+						</div>
+						<div class="container" id="deleteContainer">
+						</div>
+						<div class="panel-footer">Copyright 2016 CA Technologies</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
