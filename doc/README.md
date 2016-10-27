@@ -78,7 +78,7 @@ Before you install the CA JS OAuth sample application, install the following:
 <a name="6"></a>
 #### Install CA API Gateway and CA Mobile API Gateway 
 
-Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems are functional. For information about the CA API Gateway and MAG installation, see the [CA API Gateway](hhttps://docops.ca.com/ca-api-gateway/9-1/en/) and [CA Mobile API Gateway](https://docops.ca.com/display/MAG32/Mobile+API+Gateway+Home) documentation.
+Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems are functional. For information about the CA API Gateway and MAG installation, see the [CA API Gateway](https://docops.ca.com/ca-api-gateway/9-1/en/) and [CA Mobile API Gateway](https://docops.ca.com/display/MAG32/Mobile+API+Gateway+Home) documentation.
 
 <a name="7"></a>
 #### Register a Client with the CA OAuth Manager 
