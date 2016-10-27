@@ -166,7 +166,7 @@ Developers can install a CA JS OAuth sample application as follows:
   MAG authorizes the user to access the protected APIs because of the available access token. The server responds with user information in JSON format, and displays it on the sample application page.
 
 <a name="12"></a>
-## CA JS OAUTH 2.0 API Reference 
+## CA JS OAuth 2.0 API Reference 
 Follow the steps to use the CA JS OAuth 2.0 APIs:
 
 1. Load and initialize the CA JS OAuth 2.0 library
