@@ -53,7 +53,7 @@ The CA JS OAuth 2.0 library lets you perform the following HTTP requests:
 ## Set Up the CA JS OAuth Sample Application 
 The CA JS OAuth 2.0 sample application uses the CA JS OAuth library, and interacts with _CA Mobile API Gateway_ (MAG) OAuth 2.0 endpoints to obtain the access token. Then, the sample application presents the token to access the protected resource **(/oauth/v2/protectedapi*)** on the MAG.
 
-The following steps describes how to set up the sample application to work with MAG:
+The following steps describe how to set up the sample application to work with MAG:
 For more information about CA Mobile API Gateway, see the MAG [documentation](https://docops.ca.com/display/MAG32).
 
 <a name="4"></a>
@@ -78,7 +78,7 @@ Before you install the CA JS OAuth sample application, install the following:
 <a name="6"></a>
 #### Install CA API Gateway and CA Mobile API Gateway 
 
-Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems are functional. For information about the CA API Gateway and MAG installation, see the [CA API Gateway](https://docops.ca.com/display/GATEWAY92/CA+API+Gateway+Home) and [CA Mobile API Gateway](https://docops.ca.com/display/MAG32/Mobile+API+Gateway+Home) documentation.
+Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems are functional. For information about the CA API Gateway and MAG installation, see the [CA API Gateway](hhttps://docops.ca.com/ca-api-gateway/9-1/en/) and [CA Mobile API Gateway](https://docops.ca.com/display/MAG32/Mobile+API+Gateway+Home) documentation.
 
 <a name="7"></a>
 #### Register a Client with the CA OAuth Manager 
@@ -94,10 +94,10 @@ Administrator can configure CA API Gateway as follows:
 
 1.  Create user accounts either in local database, or in the _Lightweight Directory Access Protocol_ (LDAP). Make a note of the user account details.
 
-2.  Enable _Cross-Origin Resource Sharing_ (CORS) on the protected API *(/oauth/v2/protectedapi*)* using the Process CORS Request assertion. For more information, see the [Process CORS Request Assertion](https://docops.ca.com/display/GATEWAY92/Process+CORS+Request+Assertion) in the CA API Gateway documentation.
+2.  Enable _Cross-Origin Resource Sharing_ (CORS) on the protected API *(/oauth/v2/protectedapi*)* using the Process CORS Request assertion. For more information, see the [Process CORS Request Assertion](https://docops.ca.com/ca-api-gateway/9-1/en/policy-assertions/assertion-palette/access-control-assertions/process-cors-request-assertion) in the CA API Gateway documentation.
 
 <a name="9"></a>
-### Step3: Download CA JS OAUTH 2.0 Library 
+### Step3: Download CA JS OAuth 2.0 Library 
 
 To download the CA JS OAuth 2.0 library to your machine, follow these steps:
 
