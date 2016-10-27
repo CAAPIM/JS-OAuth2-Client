@@ -97,7 +97,7 @@ Administrator can configure CA API Gateway as follows:
 2.  Enable _Cross-Origin Resource Sharing_ (CORS) on the protected API *(/oauth/v2/protectedapi*)* using the Process CORS Request assertion. For more information, see the [Process CORS Request Assertion](https://docops.ca.com/ca-api-gateway/9-1/en/policy-assertions/assertion-palette/access-control-assertions/process-cors-request-assertion) in the CA API Gateway documentation.
 
 <a name="9"></a>
-### Step3: Download CA JS OAuth 2.0 Library 
+### Step3: Download CA JS OAuth 2.0 Library
 
 To download the CA JS OAuth 2.0 library to your machine, follow these steps:
 
@@ -119,7 +119,7 @@ Developers can install a CA JS OAuth sample application as follows:
 
 1.  Identify an app-server machine, for example, **app-server.example.com**, and install the Apache Tomcat version 7.0 or the latest. 
 
-3.  Copy the **app** folder that was downloaded as part of the CA JS OAUTH 2.0 Library to the **Apache TOMCAT-INSTALLATION folder/webapps** folder.
+3.  Copy the **app** folder that was downloaded as part of the CA JS OAuth 2.0 Library to the **Apache TOMCAT-INSTALLATION folder/webapps** folder.
 
 4.  Enable the HTTPS connectivity to the Apache Tomcat server.
 
