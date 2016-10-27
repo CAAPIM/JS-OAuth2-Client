@@ -83,7 +83,7 @@ Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems
 <a name="7"></a>
 #### Register a Client with the CA OAuth Manager 
 
-Administrator registers the client on the CA OAuth Manager. For more information, how to register a client, see the Registering Clients with the OAuth Manager section in the [CA API Management OAuth Toolkit documentation](https://docops.ca.com/display/APIMT/Registering+Clients+with+the+OAuth+Manager).
+Administrator registers the client on the CA OAuth Manager. For more information, how to register a client, see the Registering Clients with the OAuth Manager section in the [CA API Management OAuth Toolkit documentation](https://docops.ca.com/ca-api-management-oauth-toolkit/3-5/en/).
 
 **Note:** Ensure that the value of the OAuth 2.0 **Client Type** is public to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
 
