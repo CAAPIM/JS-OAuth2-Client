@@ -63,13 +63,13 @@ function xhrUtil(url,method,headers,profileId,data)
             {
                 debug.info('Success. Status:'+ xhttp.status);
                 let data = {};
+                data.httpStatus = xhttp.status;
                 if (xhttp.status != 204) {// only if there is response
-                    data = {
-                        data:JSON.parse(xhttp.responseText),
-                        httpStatus:xhttp.status
-                    };
-                resolve(data);
+                    data.data=JSON.parse(xhttp.responseText)
+                } else {
+                    data.data=''
                 }
+                resolve(data);
             }
             else {
                 let errCode;
