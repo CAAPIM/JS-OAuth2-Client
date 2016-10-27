@@ -28,7 +28,10 @@
     "url": "https://github.com/CAAPIM/JS-OAuth-Library.git"
   },
   "keywords": [
-    "cajso"
+    "cajso",
+    "OAuth",
+    "implicit",
+    "JS"
   ],
   "author": "'CA Technologies",
   "license": "MIT"
