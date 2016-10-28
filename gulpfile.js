@@ -23,4 +23,17 @@ gulp.task('wrap', function() {
     	}))
 		.pipe(multiDest(['./dist', './app/js'], destOptions));
 });
-gulp.task('default', ['wrap']);
+gulp.task('wrapWithoutUglify', function() {
+    gulp.src([
+            './src/utils.js',
+            './src/crypto.js',
+            './src/cajso.js'
+        ])
+        .pipe(babel({presets: ['es2015']}))
+        .pipe(concat('cajso.js'))
+        .pipe(wrap({
+          exports: 'cajso'
+        }))
+        .pipe(multiDest(['./dist', './app/js'], destOptions));
+});
+gulp.task('default', ['wrap','wrapWithoutUglify']);

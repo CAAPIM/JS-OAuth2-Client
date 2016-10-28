@@ -2,7 +2,7 @@
   "name": "cajso",
   "version": "1.0.0",
   "description": "JS OAuth Library",
-  "main": "gulpfile.js",
+  "main": "dist/cajso.js",
   "directories": {
     "doc": "doc"
   },

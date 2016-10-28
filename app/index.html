@@ -23,7 +23,7 @@
 			//--- Initialize the jsoClient with MAG configurations from configURL ---//
 			function initialize()
 			{
-				require(["../dist/cajso.min"], function(CAJSOC) {
+				require(["../dist/cajso"], function(CAJSOC) {
 				jsoClient = new CAJSOC();
 				//--- If empty configURL, search fallsback to ./msso_config.json ---//
 				var configURL = "";

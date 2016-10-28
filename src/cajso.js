@@ -29,12 +29,13 @@ let configuration = {};
 let server = {};
 
 // we instantiate with the global switch 
-const debug = Debugger(isDebug);
+let debug;
 
 const cajso = function() 
 {
 	//----------- Public Methods -----------//
 	this.init = () => {
+		debug = Debugger(isDebug);
         return new Promise((resolve, reject) => {
 			cryptoInit().then(() => {
 				// page handling redirection will also call init, so retrieve token if available 
