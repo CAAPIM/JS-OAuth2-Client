@@ -34,11 +34,8 @@
 				p.then((msg) => {console.log(msg);}, (msg) => {console.log(msg);});
 			
 				//-----------hide the tables ------------//
-				document.getElementById('getContainer').style.visibility= "hidden";
-				document.getElementById('postContainer').style.visibility= "hidden";
-				document.getElementById('putContainer').style.visibility= "hidden";
-				document.getElementById('patchContainer').style.visibility= "hidden";
-				document.getElementById('deleteContainer').style.visibility= "hidden";
+				document.getElementById('responseText').style.visibility= "hidden";
+				document.getElementById('httpContainer').style.visibility= "hidden";
 				});
 			}
 			//----------- Start off the authorization process ------------//
@@ -59,16 +56,13 @@
 				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
 				var hdrs = [];
 				var params;
-				document.getElementById('getContainer').style.visibility= "visible";
-				document.getElementById('postContainer').style.visibility= "hidden";
-				document.getElementById('putContainer').style.visibility= "hidden";
-				document.getElementById('patchContainer').style.visibility= "hidden";
-				document.getElementById('deleteContainer').style.visibility= "hidden";
+				document.getElementById('responseText').style.visibility= "visible";
+				document.getElementById('httpContainer').style.visibility= "visible";
 				jsoClient.get(apiURL, hdrs, params, profileId).then(
 					//---- SUCCESS Callback ----//
 					function(data){
 						//---- Handle data ----//
-                    	$("#GetTable tr").remove();
+                    	$("#responseTable tr").remove();
 	                    var trHTML = '';
 	                    var arr = $.map(data.data, function(el) { return el; });       
 	                    trHTML += '<tr>';                                         
@@ -76,17 +70,16 @@
 	                        trHTML += '<td>' + item + '</td>';
 	                    });
 	                    trHTML += '</tr>';                                         
-	                    $('#GetTable').append(trHTML);
+	                    $('#responseTable').append(trHTML);
 
 	                    console.log("State:" + jsoClient.getState(profileId));
 					}, 
 					//---- FAILURE Callback----//
 					function(err){
 						//---- Handle error ----//
-						$("#tableHeader").remove();
-						$("#GetTable tr").remove();
+						$("#responseTable tr").remove();
 						var trHTML = '<tr> <td>' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '<tr> <td>';
-						$('#GetTable').append(trHTML);
+						$('#responseTable').append(trHTML);
 					});
 
 
@@ -96,27 +89,23 @@
 				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
 				var hdrs = [];
 				var params;
-				document.getElementById('getContainer').style.visibility= "hidden";
-				document.getElementById('postContainer').style.visibility= "visible";
-				document.getElementById('putContainer').style.visibility= "hidden";
-				document.getElementById('patchContainer').style.visibility= "hidden";
-				document.getElementById('deleteContainer').style.visibility= "hidden";
+				document.getElementById('responseText').style.visibility= "visible";
+				document.getElementById('httpContainer').style.visibility= "visible";
 				var postData = document.getElementById('fd').value;		
 				jsoClient.post(apiURL, hdrs, params, profileId, postData).then(
 					//---- SUCCESS Callback ----//
 					function(data){
 						//---- Handle data ----//
-						$("#postid").remove();
-						var trHTML = '';
-						trHTML = '<p id="postid">POST data response is <b>' + data.httpStatus + '</b></p>';
-						$('#postContainer').append(trHTML);
+						$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'POST HTTP status is: <b>' + data.httpStatus +'</b><tr> <td>';
+						$('#responseTable').append(trHTML);
 					}, 
 					//---- FAILURE Callback----//
 					function(err){
 						//---- Handle error ----//
-						$("#postid").remove();
-						var trHTML = '<p id="postid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
-						$('#postContainer').append(trHTML);
+						$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '<tr> <td>';
+						$('#responseTable').append(trHTML);
 					});
 			}
 			function putDataToProtectedAPI() 
@@ -124,27 +113,23 @@
 				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
 				var hdrs = [];
 				var params;
-				document.getElementById('getContainer').style.visibility= "hidden";
-				document.getElementById('postContainer').style.visibility= "hidden";
-				document.getElementById('putContainer').style.visibility= "visible";
-				document.getElementById('patchContainer').style.visibility= "hidden";
-				document.getElementById('deleteContainer').style.visibility= "hidden";
+				document.getElementById('responseText').style.visibility= "visible";
+				document.getElementById('httpContainer').style.visibility= "visible";
 				var putData = document.getElementById('fd').value;		
 				jsoClient.put(apiURL, hdrs,params, profileId, putData).then(
 					//---- SUCCESS Callback ----//
 					function(data){
 						//---- Handle data ----//
-                    	$("#putid").remove();
-						var trHTML = '';
-						trHTML = '<p id="putid">PUT data response is <b>' + data.httpStatus + '</b></p>';
-						$('#putContainer').append(trHTML);
+                    	$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'PUT HTTP status is: <b>' + data.httpStatus +'</b><tr> <td>';
+						$('#responseTable').append(trHTML);
 					}, 
 					//---- FAILURE Callback----//
 					function(err){
 						//---- Handle error ----//
-						$("#putid").remove();
-						var trHTML = '<p id="putid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
-						$('#putContainer').append(trHTML);
+						$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '<tr> <td>';
+						$('#responseTable').append(trHTML);
 					});
 			}
 			function patchDataToProtectedAPI() 
@@ -152,27 +137,23 @@
 				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
 				var hdrs = [];
 				var params;
-				document.getElementById('getContainer').style.visibility= "hidden";
-				document.getElementById('postContainer').style.visibility= "hidden";
-				document.getElementById('putContainer').style.visibility= "hidden";
-				document.getElementById('patchContainer').style.visibility= "visible";
-				document.getElementById('deleteContainer').style.visibility= "hidden";
+				document.getElementById('responseText').style.visibility= "visible";
+				document.getElementById('httpContainer').style.visibility= "visible";
 				var patchData = document.getElementById('fd').value;		
 				jsoClient.patch(apiURL, hdrs,params, profileId, patchData).then(
 					//---- SUCCESS Callback ----//
 					function(data){
 						//---- Handle data ----//
-                    	$("#patchid").remove();
-						var trHTML = '';
-						trHTML = '<p id="patchid">PATCH data response is <b>' + data.httpStatus + '</b></p>';
-						$('#patchContainer').append(trHTML);
+                    	$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'PATCH HTTP status is: <b>' + data.httpStatus +'</b><tr> <td>';
+						$('#responseTable').append(trHTML);
 					}, 
 					//---- FAILURE Callback----//
 					function(err){
 						//---- Handle error ----//
-						$("#patchid").remove();
-						var trHTML = '<p id="patchid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
-						$('#patchContainer').append(trHTML);
+						$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '<tr> <td>';
+						$('#responseTable').append(trHTML);
 					});
 			}
 			function deleteDataFromProtectedAPI() 
@@ -180,27 +161,22 @@
 				var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
 				var hdrs = [];
 				var params;
-				document.getElementById('getContainer').style.visibility= "hidden";
-				document.getElementById('postContainer').style.visibility= "hidden";
-				document.getElementById('putContainer').style.visibility= "hidden";
-				document.getElementById('patchContainer').style.visibility= "hidden";
-				document.getElementById('deleteContainer').style.visibility= "visible";
-				
+				document.getElementById('responseText').style.visibility= "visible";	
+				document.getElementById('httpContainer').style.visibility= "visible";				
 				jsoClient.delete(apiURL, hdrs,params, profileId).then(
 					//---- SUCCESS Callback ----//
 					function(data){
 						//---- Handle data ----//
-                    	$("#deleteid").remove();
-						var trHTML = '';
-						trHTML = '<p id="deleteid">DELETE data response is <b>' + data.httpStatus + '</b></p>';
-						$('#deleteContainer').append(trHTML);
+                    	$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'DELETE HTTP status is: <b>' + data.httpStatus +'</b><tr> <td>';
+						$('#responseTable').append(trHTML);
 					}, 
 					//---- FAILURE Callback----//
 					function(err){
 						//---- Handle error ----//
-						$("#deleteid").remove();
-						var trHTML = '<p id="deleteid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
-						$('#deleteContainer').append(trHTML);
+						$("#responseid").remove();
+						var trHTML = '<p id="responseid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#responseContainer').append(trHTML);
 					});
 			}
 			
@@ -212,9 +188,20 @@
 					profileId : configuration.profileId,
 					revokeTokenUrl : configuration.tokenRevoke
 				}
+				document.getElementById('httpContainer').style.visibility= "visible";
 				jsoClient.revokeToken(revokeConfigMap).then (
-					function(data) {console.log(data.httpStatus)},
-					function(err) {console.log(err.httpStatus)}
+					function(data) {
+						//---- Handle data ----//
+                    	$("#responseTable tr").remove();
+						var trHTML = '<tr> <td>' + 'Token Revoke HTTP status is: <b>' + data.httpStatus +'</b><tr> <td>';
+						$('#responseTable').append(trHTML);
+					},
+					function(err) {
+						//---- Handle error ----//
+						$("#responseid").remove();
+						var trHTML = '<p id="responseid">' + 'Returned error with http status:' + err.httpStatus + ' and error code:' + err.errorCode + '</p>';
+						$('#responseContainer').append(trHTML);
+					}
 					);
 			}
 		</script>		
@@ -287,29 +274,13 @@
 							<td><input type='button' class="btn btn-primary" name='clearToken' value='Remove Token' onclick='javascript:removeToken();'/></td>
 							</tr>
 						</table>					
-						<div class="container"  id="getContainer">				
-							<table class="table" >
-								<thead id="tableHeader">
-								  <tr>
-									<th>Client ID</th>
-									<th>Subscriber ID</th>
-									<th>Scope</th>
-									<th>Expires At</th>
-									<th>Accessed At</th>
-								  </tr>								  
-								</thead>								
-								<tbody id="GetTable">
+						<div class="container"  id="httpContainer">
+							<p id="responseText"> HTTP response : </p>			
+							<table class="table" >							
+								<tbody id="responseTable">
 								
 								</tbody>
 							</table>
-						</div>
-						<div class="container" id="postContainer">
-						</div>
-						<div class="container" id="putContainer">
-						</div>
-						<div class="container" id="patchContainer">
-						</div>
-						<div class="container" id="deleteContainer">
 						</div>
 						<div class="panel-footer">Copyright 2016 CA Technologies</div>
 					</div>

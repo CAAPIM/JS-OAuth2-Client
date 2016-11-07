@@ -18,7 +18,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-multi-dest": "0.0.4",
     "gulp-uglify": "^2.0.0",
-    "gulp-wrap-amd": "^0.5.0"
+    "gulp-umd": "^0.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,5 +1,12 @@
-define(function(require,exports,module){
-
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.Cajso = factory();
+  }
+}(this, function() {
 'use strict';
 
 /*
@@ -804,5 +811,4 @@ var cajso = function cajso() {
 	_jsoclient_instance_ = this;
 };
 return cajso;
-
-});
+}));
