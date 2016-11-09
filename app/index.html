@@ -31,7 +31,13 @@
 				getOAuthParams("msso-config.json", profileId);
 				//jsoClient.init(configURL);
 				var p = jsoClient.init();
-				p.then((msg) => {console.log(msg);}, (msg) => {console.log(msg);});
+				p.then((msg) => {console.log(msg);}, (err) => {
+					document.getElementById('httpContainer').style.visibility= "visible";
+					//---- Handle error ----//
+					$("#responseTable tr").remove();
+					var trHTML = '<tr> <td>' + 'Returned error: <b>' + err.error + '</b> with error code: <b>' + err['x-ca-err'] + ' </b><tr> <td>';
+					$('#responseTable').append(trHTML);
+				});
 			
 				//-----------hide the tables ------------//
 				document.getElementById('responseText').style.visibility= "hidden";

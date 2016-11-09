@@ -348,6 +348,16 @@ function getTokenFromURLFragment()
     return new Promise((resolve, reject) => {
         let token, state, stateID;
         let now = Math.round(new Date().getTime()/1000.0);
+        //if returned with query params
+        var query = location.search.substr(1);
+        var result = {};
+        if(query) {
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+            reject(result);
+        }
         let hashUrl = window.location.hash;
         if (hashUrl.length < 2)
         {
