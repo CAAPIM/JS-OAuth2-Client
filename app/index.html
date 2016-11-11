@@ -35,7 +35,7 @@
 					document.getElementById('httpContainer').style.visibility= "visible";
 					//---- Handle error ----//
 					$("#responseTable tr").remove();
-					var trHTML = '<tr> <td>' + 'Returned error: <b>' + err.error + '</b> with error code: <b>' + err['x-ca-err'] + ' </b><tr> <td>';
+					var trHTML = '<tr> <td>' + 'Returned error: <b>' + err.errMsg + '</b> with error code: <b>' + err.errorCode + ' </b><tr> <td>';
 					$('#responseTable').append(trHTML);
 				});
 			

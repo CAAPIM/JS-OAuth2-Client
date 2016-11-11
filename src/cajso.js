@@ -43,11 +43,13 @@ const cajso = function()
 				getTokenFromURLFragment().then( 
                                     (state) => {
                                         resolve(state);
-                                    }, (msg) => {
-                                        reject(msg);
+                                    }, (errObj) => {
+                                        reject(errObj);
                                     });
                 }, (msg) => {
-                    reject(msg);
+                	let errObj = CRYPO_ERROR;
+                	errObj.errMsg = msg;
+					reject(errObj);
                 });
             });
         }

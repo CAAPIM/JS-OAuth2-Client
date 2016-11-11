@@ -356,6 +356,7 @@ function getTokenFromURLFragment()
                 var item = part.split("=");
                 result[item[0]] = decodeURIComponent(item[1]);
             });
+            result.errMsg = result.error, result.httpStatus=200,  result.errorCode=server_errCode;
             reject(result);
         }
         let hashUrl = window.location.hash;
@@ -381,7 +382,9 @@ function getTokenFromURLFragment()
         else
         {
             debug.info('Could not retrieve state from URL fragment');
-            reject('Could not retrieve state from URL fragment');
+            let errObj;
+            errObj.errMsg = 'Could not retrieve state from URL fragment';
+            reject(errObj);
         }
         if (state)
         {
@@ -396,7 +399,9 @@ function getTokenFromURLFragment()
         } 
         else
         { 
-            reject('Could not retrieve state from localStorage');
+            let errObj;
+            errObj.errMsg = 'Could not retrieve state from localStorage';
+            reject(errObj);
         }
     });
 }

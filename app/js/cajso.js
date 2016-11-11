@@ -312,6 +312,7 @@ function getTokenFromURLFragment() {
                 var item = part.split("=");
                 result[item[0]] = decodeURIComponent(item[1]);
             });
+            result.errMsg = result.error, result.httpStatus = 200, result.errorCode = server_errCode;
             reject(result);
         }
         var hashUrl = window.location.hash;
@@ -332,7 +333,9 @@ function getTokenFromURLFragment() {
             state = JSON.parse(localStorage.getItem('s-' + stateID));
         } else {
             debug.info('Could not retrieve state from URL fragment');
-            reject('Could not retrieve state from URL fragment');
+            var errObj = void 0;
+            errObj.errMsg = 'Could not retrieve state from URL fragment';
+            reject(errObj);
         }
         if (state) {
             // clean up state from localStorage now that we have successfull retrieved state info
@@ -348,7 +351,9 @@ function getTokenFromURLFragment() {
                 reject(msg);
             });
         } else {
-            reject('Could not retrieve state from localStorage');
+            var _errObj = void 0;
+            _errObj.errMsg = 'Could not retrieve state from localStorage';
+            reject(_errObj);
         }
     });
 }
@@ -772,11 +777,13 @@ var cajso = function cajso() {
 				// from URL Fragment. In either case, call initCallback...
 				getTokenFromURLFragment().then(function (state) {
 					resolve(state);
-				}, function (msg) {
-					reject(msg);
+				}, function (errObj) {
+					reject(errObj);
 				});
 			}, function (msg) {
-				reject(msg);
+				var errObj = CRYPO_ERROR;
+				errObj.errMsg = msg;
+				reject(errObj);
 			});
 		});
 	};
