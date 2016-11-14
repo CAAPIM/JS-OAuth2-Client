@@ -249,7 +249,9 @@ function performHttpOp(Op, apiURL, hdrs, params, profileId, payload) {
                     });
                 }, function (msg) {
                     debug.info(msg);
-                    reject(CRYPTO_ERROR);
+                    var errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
                 });
             }
     });
@@ -348,7 +350,10 @@ function getTokenFromURLFragment() {
             encryptToken(token['access_token'], cbparams).then(function () {
                 resolve(state.state);
             }, function (msg) {
-                reject(msg);
+                debug.info(msg);
+                var errObj = CRYPO_ERROR;
+                errObj.errMsg = msg;
+                reject(errObj);
             });
         } else {
             var _errObj = void 0;
@@ -532,7 +537,9 @@ function do_clear(revokeConfigMap) {
                 });
             }, function (msg) {
                 debug.info(msg);
-                reject(CRYPTO_ERROR);
+                var errObj = CRYPO_ERROR;
+                errObj.errMsg = msg;
+                reject(errObj);
             });
         }
     });

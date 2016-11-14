@@ -284,8 +284,10 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
                         );
                 },
                 (msg) => {
-                    debug.info(msg); 
-                    reject(CRYPTO_ERROR);
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
                 }
             );
         }
@@ -395,7 +397,13 @@ function getTokenFromURLFragment()
                 profileId : state['profileId'],
                 token : token
             };
-            encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);}, (msg) => {reject(msg);});
+            encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);}, 
+                (msg) => {
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
+                });
         } 
         else
         { 
@@ -621,8 +629,10 @@ function do_clear(revokeConfigMap)
                         );
                 },
                 (msg) => {
-                    debug.info(msg); 
-                    reject(CRYPTO_ERROR);
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
                 }
             );
         }
