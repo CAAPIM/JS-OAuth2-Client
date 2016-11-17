@@ -284,8 +284,10 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
                         );
                 },
                 (msg) => {
-                    debug.info(msg); 
-                    reject(CRYPTO_ERROR);
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
                 }
             );
         }
@@ -348,6 +350,17 @@ function getTokenFromURLFragment()
     return new Promise((resolve, reject) => {
         let token, state, stateID;
         let now = Math.round(new Date().getTime()/1000.0);
+        //if returned with query params
+        var query = location.search.substr(1);
+        var result = {};
+        if(query) {
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+            result.errMsg = result.error, result.httpStatus=200,  result.errorCode=server_errCode;
+            reject(result);
+        }
         let hashUrl = window.location.hash;
         if (hashUrl.length < 2)
         {
@@ -371,7 +384,9 @@ function getTokenFromURLFragment()
         else
         {
             debug.info('Could not retrieve state from URL fragment');
-            reject('Could not retrieve state from URL fragment');
+            let errObj;
+            errObj.errMsg = 'Could not retrieve state from URL fragment';
+            reject(errObj);
         }
         if (state)
         {
@@ -382,11 +397,19 @@ function getTokenFromURLFragment()
                 profileId : state['profileId'],
                 token : token
             };
-            encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);}, (msg) => {reject(msg);});
+            encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);}, 
+                (msg) => {
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
+                });
         } 
         else
         { 
-            reject('Could not retrieve state from localStorage');
+            let errObj;
+            errObj.errMsg = 'Could not retrieve state from localStorage';
+            reject(errObj);
         }
     });
 }
@@ -606,8 +629,10 @@ function do_clear(revokeConfigMap)
                         );
                 },
                 (msg) => {
-                    debug.info(msg); 
-                    reject(CRYPTO_ERROR);
+                    debug.info(msg);
+                    let errObj = CRYPO_ERROR;
+                    errObj.errMsg = msg;
+                    reject(errObj);
                 }
             );
         }
