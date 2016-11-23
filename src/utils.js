@@ -85,7 +85,6 @@ function xhrUtil(url,method,headers,profileId,data)
                     }
                     else if ( xhttp.status === 401)
                     {
-                        localStorage.removeItem('t-'+profileId);
                         errCode = invalid_cred_errCode;
                    
                     }

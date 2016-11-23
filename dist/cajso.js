@@ -80,7 +80,6 @@ function xhrUtil(url, method, headers, profileId, data) {
                     } else if (xhttp.status === 400) {
                         errCode = bad_request_errCode;
                     } else if (xhttp.status === 401) {
-                        localStorage.removeItem('t-' + profileId);
                         errCode = invalid_cred_errCode;
                     } else if (xhttp.status === 404) {
                         errCode = api_not_found_errCode;
