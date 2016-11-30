@@ -19,8 +19,8 @@ let crypto;
 let doInitCallBack;
 let cryptoInitCallback;
 const aesAlgorithmKeyGen = {
-	name : 'aes-cbc',
-	length : 128
+  name : 'aes-cbc',
+  length : 128
 }
 let decryptedToken;
 
@@ -28,62 +28,62 @@ let isDebug = false; //global debug state
 let configuration = {};
 let server = {};
 
-// we instantiate with the global switch 
+// we instantiate with the global switch
 let debug;
 
-const cajso = function() 
+const cajso = function()
 {
-	//----------- Public Methods -----------//
-	this.init = () => {
-		debug = Debugger(isDebug);
-        return new Promise((resolve, reject) => {
-			cryptoInit().then(() => {
-				// page handling redirection will also call init, so retrieve token if available 
-				// from URL Fragment. In either case, call initCallback...
-				getTokenFromURLFragment().then( 
-                                    (state) => {
-                                        resolve(state);
-                                    }, (errObj) => {
-                                        reject(errObj);
-                                    });
-                }, (msg) => {
-                	let errObj = CRYPO_ERROR;
-                	errObj.errMsg = msg;
-					reject(errObj);
-                });
-            });
-        }
-	// Fetch the token from local storage if available, or do the authorization
-	// dance to get a token from auth server...
-	this.authorize = (profileId, configMap) => 
-		retrieveToken(profileId, configMap);
-	
-	this.get = (apiURL, hdrs,params, profileId) =>
-		performHttpOp('GET', apiURL, hdrs,params, profileId);
-	
-	this.post = (apiURL,hdrs,params, profileId, postData) =>
-		performHttpOp('POST', apiURL, hdrs,params, profileId, postData);
-	
-	this.put = (apiURL, hdrs,params, profileId, putData) =>
-		performHttpOp('PUT', apiURL, hdrs,params, profileId, putData);	
-	
-	this.patch = (apiURL, hdrs,params, profileId, patchData) =>
-		performHttpOp('PATCH', apiURL, hdrs,params, profileId, patchData);
-	
-	this.delete = (apiURL, hdrs,params, profileId) =>
-		performHttpOp('DELETE', apiURL, hdrs,params, profileId);	
-	
-	this.isTokenAvailable = profileId =>
-	{
-		let token = getToken(profileId);
-		if (!token) return false;
-		else return true;	
-	}
-	this.revokeToken = (revokeConfigMap) =>	
-		do_clear(revokeConfigMap);
-	
-	this.getState = profileId => 
-		getStateFromProfileId(profileId);
-	
-	_jsoclient_instance_ = this;
+  //----------- Public Methods -----------//
+  this.init = () => {
+    debug = Debugger(isDebug);
+    return new Promise((resolve, reject) => {
+      cryptoInit().then(() => {
+        // page handling redirection will also call init, so retrieve token if available
+        // from URL Fragment. In either case, call initCallback...
+        getTokenFromURLFragment().then(
+                  (state) => {
+                    resolve(state);
+                  }, (errObj) => {
+                    reject(errObj);
+                  });
+        }, (msg) => {
+          let errObj = CRYPO_ERROR;
+          errObj.errMsg = msg;
+          reject(errObj);
+        });
+      });
+    }
+  // Fetch the token from local storage if available, or do the authorization
+  // dance to get a token from auth server...
+  this.authorize = (profileId, configMap) =>
+    retrieveToken(profileId, configMap);
+
+  this.get = (apiURL, hdrs,params, profileId) =>
+    performHttpOp('GET', apiURL, hdrs,params, profileId);
+
+  this.post = (apiURL,hdrs,params, profileId, postData) =>
+    performHttpOp('POST', apiURL, hdrs,params, profileId, postData);
+
+  this.put = (apiURL, hdrs,params, profileId, putData) =>
+    performHttpOp('PUT', apiURL, hdrs,params, profileId, putData);
+
+  this.patch = (apiURL, hdrs,params, profileId, patchData) =>
+    performHttpOp('PATCH', apiURL, hdrs,params, profileId, patchData);
+
+  this.delete = (apiURL, hdrs,params, profileId) =>
+    performHttpOp('DELETE', apiURL, hdrs,params, profileId);
+
+  this.isTokenAvailable = profileId =>
+  {
+    let token = getToken(profileId);
+    if (!token) return false;
+    else return true;
+  }
+  this.revokeToken = (revokeConfigMap) =>
+    do_clear(revokeConfigMap);
+
+  this.getState = profileId =>
+    getStateFromProfileId(profileId);
+
+  _jsoclient_instance_ = this;
 };

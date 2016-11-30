@@ -6,38 +6,38 @@ var babel = require('gulp-babel');
 var multiDest = require('gulp-multi-dest');
 
 var destOptions = {
-    mode: 0755
+  mode: 0755
 };
 
 gulp.task('wrap', function() {
-	gulp.src([
-			'./src/utils.js',
-			'./src/crypto.js',
-			'./src/cajso.js'
-		])
-		.pipe(babel({presets: ['es2015']}))
-		.pipe(concat('cajso.min.js'))
-		.pipe(uglify())
-		.pipe(wrap({
-	      	exports: function(file) {
-	          return 'cajso';
-	        }
-    	}))
-		.pipe(multiDest(['./dist', './app/js'], destOptions));
+  gulp.src([
+      './src/utils.js',
+      './src/crypto.js',
+      './src/cajso.js'
+    ])
+    .pipe(babel({presets: ['es2015']}))
+    .pipe(concat('cajso.min.js'))
+    .pipe(uglify())
+    .pipe(wrap({
+      exports: function(file) {
+        return 'cajso';
+      }
+    }))
+    .pipe(multiDest(['./dist', './app/js'], destOptions));
 });
 gulp.task('wrapWithoutUglify', function() {
-	gulp.src([
-			'./src/utils.js',
-			'./src/crypto.js',
-			'./src/cajso.js'
-		])
-		.pipe(babel({presets: ['es2015']}))
-		.pipe(concat('cajso.js'))
-		.pipe(wrap({
-	      	exports: function(file) {
-	          return 'cajso';
-	        }
-    	}))
-		.pipe(multiDest(['./dist', './app/js'], destOptions));
+  gulp.src([
+      './src/utils.js',
+      './src/crypto.js',
+      './src/cajso.js'
+    ])
+    .pipe(babel({presets: ['es2015']}))
+    .pipe(concat('cajso.js'))
+    .pipe(wrap({
+      exports: function(file) {
+        return 'cajso';
+      }
+    }))
+    .pipe(multiDest(['./dist', './app/js'], destOptions));
 });
 gulp.task('default', ['wrap','wrapWithoutUglify']);
