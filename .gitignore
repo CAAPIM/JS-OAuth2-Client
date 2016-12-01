@@ -10,3 +10,6 @@ Thumbs.db
 node_modules
 npm-debug.log
 dist
+example/msso_config.json
+example/js/cajso.js
+example/js/cajso.min.js

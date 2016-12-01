@@ -16,12 +16,16 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
-    "gulp-multi-dest": "0.0.4",
     "gulp-uglify": "^2.0.0",
-    "gulp-umd": "^0.2.0"
+    "gulp-umd": "^0.2.0",
+    "http-server": "^0.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp build",
+    "build:example": "gulp example",
+    "prestart": "npm run build:example",
+    "start": "http-server example -p 8080",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

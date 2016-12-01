@@ -3,41 +3,60 @@ var wrap = require('gulp-umd');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
-var multiDest = require('gulp-multi-dest');
 
 var destOptions = {
   mode: 0755
 };
 
-gulp.task('wrap', function() {
-  gulp.src([
-      './src/utils.js',
-      './src/crypto.js',
-      './src/cajso.js'
-    ])
-    .pipe(babel({presets: ['es2015']}))
+var srcFiles = [
+  './src/utils.js',
+  './src/crypto.js',
+  './src/cajso.js'
+];
+
+var umdOptions = {
+  exports: function(file) {
+    return 'cajso';
+  },
+  namespace: function(file) {
+    return 'Cajso';
+  }
+};
+
+gulp.task('build:min', function() {
+  gulp.src(srcFiles)
+    .pipe(babel())
     .pipe(concat('cajso.min.js'))
+    .pipe(wrap(umdOptions))
     .pipe(uglify())
-    .pipe(wrap({
-      exports: function(file) {
-        return 'cajso';
-      }
-    }))
-    .pipe(multiDest(['./dist', './app/js'], destOptions));
+    .pipe(gulp.dest('./dist', destOptions));
 });
-gulp.task('wrapWithoutUglify', function() {
-  gulp.src([
-      './src/utils.js',
-      './src/crypto.js',
-      './src/cajso.js'
-    ])
-    .pipe(babel({presets: ['es2015']}))
+
+gulp.task('build:dev', function() {
+  gulp.src(srcFiles)
+    .pipe(babel())
     .pipe(concat('cajso.js'))
-    .pipe(wrap({
-      exports: function(file) {
-        return 'cajso';
-      }
-    }))
-    .pipe(multiDest(['./dist', './app/js'], destOptions));
+    .pipe(wrap(umdOptions))
+    .pipe(gulp.dest('./dist', destOptions));
 });
-gulp.task('default', ['wrap','wrapWithoutUglify']);
+
+gulp.task('example:min', function() {
+  gulp.src(srcFiles)
+    .pipe(babel())
+    .pipe(concat('cajso.min.js'))
+    .pipe(wrap(umdOptions))
+    .pipe(uglify())
+    .pipe(gulp.dest('./example/js', destOptions));
+});
+
+gulp.task('example:dev', function() {
+  gulp.src(srcFiles)
+    .pipe(babel())
+    .pipe(concat('cajso.js'))
+    .pipe(wrap(umdOptions))
+    .pipe(gulp.dest('./example/js', destOptions));
+});
+
+gulp.task('build', ['build:dev','build:min']);
+
+gulp.task('example', ['example:dev','example:min']);
