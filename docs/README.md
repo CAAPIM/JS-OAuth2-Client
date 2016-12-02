@@ -12,7 +12,6 @@
     3. [Step3: Download CA JS OAUTH 2.0 Library](#9)
     4. [Step4: Deploy the CA JS OAuth Sample Application](#10)
     5. [Step5: Use the CA JS OAuth Sample Application](#11)
-	6. [Step6: Build the CA JS OAuth 2.0 library](#12)
 4. [CA JS OAUTH 2.0 API Reference](#13)
     1. [Load and Initialize the CA JS OAuth 2.0 Library](#14)
     2. [Authorize](#15)
@@ -23,6 +22,7 @@
     7. [HTTP DELETE Request](#20)
     8. [Remove Token](#21)
 5. [API Error Codes](#22)
+6: [Build the CA JS OAuth 2.0 library](#12)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
@@ -87,9 +87,8 @@ Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems
 Administrator registers the client on the CA OAuth Manager. For more information, how to register a client, see the Registering Clients with the OAuth Manager section in the [CA API Management OAuth Toolkit documentation](https://docops.ca.com/ca-api-management-oauth-toolkit/3-5/en/registering-clients-with-the-oauth-manager).
 
 **Note:** 
-	* Ensure that the value of the OAuth 2.0 **Client Type** is **public** to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
-	
-	* The Redirect URI should be: http://127.0.0.1:8080.
+- Ensure that the value of the OAuth 2.0 **Client Type** is **public** to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+- The Redirect URI should be: http://<i></i>127.0.0.1:8080.
 
 <a name="8"></a>
 #### Configure CA API Gateway 
@@ -131,7 +130,7 @@ Developers can install a CA JS OAuth sample application as follows:
 
 1.  On Windows desktop machine (client machine), open the CA JS OAuth sample application by providing the following address in a browser:
       
-    http://127.0.0.1:8080
+    http://<i></i>127.0.0.1:8080
     
     The following illustration shows the CA JS OAuth sample application:
 
@@ -160,14 +159,6 @@ Developers can install a CA JS OAuth sample application as follows:
     By default, the *GET* method in the sample application retrieves data from the resource. To test the other HTTP methods, ensure that they are supported in the _/oauth/v2/protectedapi*_ policy implementation.
 
   MAG authorizes the user to access the protected APIs because of the available access token. The server responds with user information in JSON format, and displays it on the sample application page.
-
-  <a name="12"></a>
-### Step5: Build the CA JS OAuth 2.0 library
-Follow the steps to build the CA JS OAuth 2.0 library:
-1.	Ensure node.js is installed on your machine.
-2.	Navigate to the parent directory.
-3.	Open the terminal, and run the following command:
-	$ npm install.
 
 <a name="13"></a>
 ## CA JS OAuth 2.0 API Reference 
@@ -584,6 +575,14 @@ Error code | Description
 -1003 | Web Crypto is not supported
 -1004 | Error occurred due to network failure
 -1005 | Internal server error
+
+ <a name="12"></a>
+## Build the CA JS OAuth 2.0 library
+Follow the steps to build the CA JS OAuth 2.0 library:
+1.	Ensure node.js is installed on your machine.
+2.	Navigate to the parent directory.
+3.	Open the terminal, and run the following command:
+	$ npm install.
 -1006 | The HTTP request failed due to invalid username and password
 -1007 | Requested API does not exist
 -1008 | Bad request or invalid input
