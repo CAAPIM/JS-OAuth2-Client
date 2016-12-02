@@ -1,9 +1,15 @@
+/*
+Copyright (c) 2016 CA. All rights reserved.
+This software may be modified and distributed under the terms
+of the MIT license. See the LICENSE file for details.
+*/
+
 //Processing of the msso-config.json
 function getOAuthParams(configURL,profileId)
 {
 	if (!configURL.trim())
 	{
-    	configURL = 'msso-config.json';
+    	configURL = 'msso_config.json';
 	}
 	var oauth_config;
 	//////   XMLHttpRequest //////
@@ -29,30 +35,30 @@ function getOAuthParams(configURL,profileId)
 				console.error('Missing OAuth config parameters');
 				return cajso.ERROR;
 			}
-			if(!oauth_config.oauth.system_endpoints.authorization_endpoint_path || 
+			if(!oauth_config.oauth.system_endpoints.authorization_endpoint_path ||
 				!oauth_config.server.hostname || !oauth_config.server.port)
 			{
-				console.error('Invalid OAuth authorization URI: ' + 'https://' + oauth_config.server.hostname + ':' + 
+				console.error('Invalid OAuth authorization URI: ' + 'https://' + oauth_config.server.hostname + ':' +
 					 oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path);
 				return cajso.ERROR;
 			}
 			if(!server.prefix) {
-				configuration.authorization = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.authorization = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
-				configuration.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
-				configuration.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
 			}
 			else {
-				configuration.authorization = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.authorization = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
-				configuration.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port +"/" + server.prefix + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
-				configuration.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' + 
+				configuration.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
 					oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
 			}
-			configuration.state = stateID();	
+			configuration.state = stateID();
 			configuration.scope = configuration.scope.split(' ');
 			configuration.profileId = profileId;
 			//debug.info('MSSO configuration ');

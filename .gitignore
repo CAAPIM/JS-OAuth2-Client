@@ -1,0 +1,15 @@
+# global files
+.DS_Store
+Desktop.ini
+Thumbs.db
+.Spotlight-V100
+.Trashes
+*.sublime-workspace
+
+# project files
+node_modules
+npm-debug.log
+dist
+example/msso_config.json
+example/js/cajso.js
+example/js/cajso.min.js
