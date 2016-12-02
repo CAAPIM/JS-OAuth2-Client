@@ -12,16 +12,17 @@
     3. [Step3: Download CA JS OAUTH 2.0 Library](#9)
     4. [Step4: Deploy the CA JS OAuth Sample Application](#10)
     5. [Step5: Use the CA JS OAuth Sample Application](#11)
-4. [CA JS OAUTH 2.0 API Reference](#12)
-    1. [Load and Initialize the CA JS OAuth 2.0 Library](#13)
-    2. [Authorize](#14)
-    3. [HTTP GET Request](#15)
-    4. [HTTP POST Request](#16)
-    5. [HTTP PUT Request](#17)
-    6. [HTTP PATCH Request](#18)
-    7. [HTTP DELETE Request](#19)
-    8. [Remove Token](#20)
-5. [API Error Codes](#21)
+	6. [Step6: Build the CA JS OAuth 2.0 library](#12)
+4. [CA JS OAUTH 2.0 API Reference](#13)
+    1. [Load and Initialize the CA JS OAuth 2.0 Library](#14)
+    2. [Authorize](#15)
+    3. [HTTP GET Request](#16)
+    4. [HTTP POST Request](#17)
+    5. [HTTP PUT Request](#18)
+    6. [HTTP PATCH Request](#19)
+    7. [HTTP DELETE Request](#20)
+    8. [Remove Token](#21)
+5. [API Error Codes](#22)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
@@ -85,7 +86,9 @@ Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems
 
 Administrator registers the client on the CA OAuth Manager. For more information, how to register a client, see the Registering Clients with the OAuth Manager section in the [CA API Management OAuth Toolkit documentation](https://docops.ca.com/ca-api-management-oauth-toolkit/3-5/en/registering-clients-with-the-oauth-manager).
 
-**Note:** Ensure that the value of the OAuth 2.0 **Client Type** is public to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+**Note:** 
+	* Ensure that the value of the OAuth 2.0 **Client Type** is **public** to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+	* The Redirect URI should be: http://127.0.0.1:8080.
 
 <a name="8"></a>
 #### Configure CA API Gateway 
@@ -106,10 +109,6 @@ Download the JavaScript-OAuth-Library.zip file from the [GitHub location](https:
 1.  Navigate to the GitHub repository.
 
 2.  Click the Download Zip button to download the files, and then extract it to your machine.
-
-3.  The downloaded folder contains the files, and sub-folders as follows:
-
- ![CA JSO OAuth Client Folder Structure](./images/Folder_Structure.png?raw=true "Folder Structure")
   
 
 <a name="10"></a>
@@ -117,25 +116,21 @@ Download the JavaScript-OAuth-Library.zip file from the [GitHub location](https:
 
 Developers can install a CA JS OAuth sample application as follows:
 
-1.  Identify an app-server machine, for example, **app-server.example.com**, and install the Apache Tomcat version 7.0 or the latest. 
+1.  Copy the **msso_config.json** file to the **example** folder.
 
-3.  Copy the **app** folder that was downloaded as part of the CA JS OAuth 2.0 Library to the **Apache TOMCAT-INSTALLATION folder/webapps** folder.
-
-4.  Enable the HTTPS connectivity to the Apache Tomcat server.
-
-5.  Copy the **msso_config.json** file to web context of the **app** folder in the Apache Tomcat server.
     **Note:** The **msso_config.json** file is created and exported as part of the client registration on CA OAuth Manager.
 
-6.  Ensure that the **msso_config.json** file is in the same folder as the **index.html** file.
+2.  Ensure that the **msso_config.json** file is in the same folder as the **index.html** file.
 
-7.  Start the Apache Tomcat server.
+3.  Run the following command from the terminal:
+	$ npm start
 
 <a name="11"></a>
 ### Step5: Use the CA JS OAuth Sample Application 
 
 1.  On Windows desktop machine (client machine), open the CA JS OAuth sample application by providing the following address in a browser:
       
-    https://<i></i>app-server.example.com:port/app/index.html.
+    http://127.0.0.1:8080
     
     The following illustration shows the CA JS OAuth sample application:
 
@@ -165,7 +160,15 @@ Developers can install a CA JS OAuth sample application as follows:
 
   MAG authorizes the user to access the protected APIs because of the available access token. The server responds with user information in JSON format, and displays it on the sample application page.
 
-<a name="12"></a>
+  <a name="12"></a>
+### Step5: Build the CA JS OAuth 2.0 library
+Follow the steps to build the CA JS OAuth 2.0 library:
+1.	Ensure node.js is installed on your machine.
+2.	Navigate to the parent directory.
+3.	Open the terminal, and run the following command:
+	$ npm install.
+
+<a name="13"></a>
 ## CA JS OAuth 2.0 API Reference 
 Follow the steps to use the CA JS OAuth 2.0 APIs:
 
@@ -185,7 +188,7 @@ Follow the steps to use the CA JS OAuth 2.0 APIs:
 
 8. Remove Token
 
-<a name="13"></a>
+<a name="14"></a>
 ### Load and Initialize the CA JS OAuth 2.0 Library 
 
 Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as follows:
@@ -221,7 +224,7 @@ function initialize()
     );
 }
 ```
-<a name="14"></a>
+<a name="15"></a>
 ### Authorize 
 
 `jsoClient.authorize()`
@@ -257,7 +260,7 @@ function authorize()
  }
   ```
 
-<a name="15"></a>
+<a name="16"></a>
 ### HTTP GET Request 
 
 `jsoClient.get()` 
@@ -308,7 +311,7 @@ profileId).then(
     );
 ```
 
-<a name="16"></a>
+<a name="17"></a>
 ### HTTP POST Request 
 
 `jsoClient.post()`
@@ -365,7 +368,7 @@ postData).then (
     );
 ```
 
-<a name="17"></a>
+<a name="18"></a>
 ### HTTP PUT Request 
 
 `jsoClient.put()`
@@ -423,7 +426,7 @@ putData).then (
     );
 ```
 
- <a name="18"></a>
+ <a name="19"></a>
 ### HTTP PATCH Request 
 
 `jsoClient.patch()`
@@ -482,7 +485,7 @@ patchData).then (
     );
  ```
  
-<a name="19"></a>
+<a name="20"></a>
 ### HTTP DELETE Request 
 
 `jsoClient.delete()`
@@ -533,7 +536,7 @@ profileId).then (
     );
 ```
 
-<a name="20"></a>
+<a name="21"></a>
 ### Remove Token 
 
 `jsoClient.revokeToken()`
@@ -568,7 +571,7 @@ jsoClient.revokeToken(revokeConfigMap) .then (
 }
 ```
 
-<a name="21"></a>
+<a name="22"></a>
 ## API Error Codes 
 
 The following list defines the API error code and the reason why the error occurred:

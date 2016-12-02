@@ -4,7 +4,7 @@
 The CA JS OAuth 2.0 Library gives a JavaScript based library that implements OAuth 2.0 “Implicit” grant flow, as specified in the [https://tools.ietf.org/html/rfc6749](https://tools.ietf.org/html/rfc6749) site.
 ************************************************
 ##Get Started
-Follow the CA JS OAuth 2.0 Getting Started Guide, our step-by-step guide to get started. The Getting Started Guide is located in the doc folder of the [GitHub repository](https://github.com/CAAPIM/JS-OAuth-Library/tree/develop/doc).
+Follow the CA JS OAuth 2.0 Getting Started Guide, our step-by-step guide to get started. The Getting Started Guide is located in the docs folder of the [GitHub repository](https://github.com/CAAPIM/JS-OAuth-Library/tree/develop/docs).
 **************************************************
 
 ##Feature Highlights
@@ -16,7 +16,7 @@ Follow the CA JS OAuth 2.0 Getting Started Guide, our step-by-step guide to get 
 **********************************************************
 
 ##API Details
-Get the API details from the CA JS OAuth 2.0 Getting Started Guide from the [GitHub repository](https://github.com/CAAPIM/JS-OAuth-Library/tree/develop/doc).
+Get the API details from the CA JS OAuth 2.0 Getting Started Guide from the [GitHub repository](https://github.com/CAAPIM/JS-OAuth-Library/tree/develop/docs).
 ***********************************************************
 
 ##How Can You Contribute
