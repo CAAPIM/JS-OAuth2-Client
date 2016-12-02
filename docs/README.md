@@ -22,7 +22,7 @@
     7. [HTTP DELETE Request](#20)
     8. [Remove Token](#21)
 5. [API Error Codes](#22)
-6: [Build the CA JS OAuth 2.0 library](#12)
+6. [Build the CA JS OAuth 2.0 library](#12)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
