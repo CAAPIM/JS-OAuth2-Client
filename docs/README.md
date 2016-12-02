@@ -88,6 +88,7 @@ Administrator registers the client on the CA OAuth Manager. For more information
 
 **Note:** 
 	* Ensure that the value of the OAuth 2.0 **Client Type** is **public** to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+	
 	* The Redirect URI should be: http://127.0.0.1:8080.
 
 <a name="8"></a>
