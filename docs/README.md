@@ -581,8 +581,11 @@ Error code | Description
 
  <a name="12"></a>
 ## Build the CA JS OAuth 2.0 library 
-Follow the steps to build the CA JS OAuth 2.0 library: 
-1.	Ensure node.js is installed on your machine. 
-2.	Navigate to the parent directory. 
+Follow the steps to build the CA JS OAuth 2.0 library:
+
+1.	Ensure node.js is installed on your machine.
+
+2.	Navigate to the parent directory.
+
 3.	Open the terminal, and run the following command: 
 	$ npm install.
