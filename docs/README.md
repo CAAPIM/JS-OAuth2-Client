@@ -12,17 +12,17 @@
     3. [Step3: Download CA JS OAUTH 2.0 Library](#9)
     4. [Step4: Deploy the CA JS OAuth Sample Application](#10)
     5. [Step5: Use the CA JS OAuth Sample Application](#11)
-4. [CA JS OAUTH 2.0 API Reference](#13)
-    1. [Load and Initialize the CA JS OAuth 2.0 Library](#14)
-    2. [Authorize](#15)
-    3. [HTTP GET Request](#16)
-    4. [HTTP POST Request](#17)
-    5. [HTTP PUT Request](#18)
-    6. [HTTP PATCH Request](#19)
-    7. [HTTP DELETE Request](#20)
-    8. [Remove Token](#21)
-5. [API Error Codes](#22)
-6. [Build the CA JS OAuth 2.0 library](#12)
+4. [CA JS OAUTH 2.0 API Reference](#12)
+    1. [Load and Initialize the CA JS OAuth 2.0 Library](#13)
+    2. [Authorize](#14)
+    3. [HTTP GET Request](#15)
+    4. [HTTP POST Request](#16)
+    5. [HTTP PUT Request](#17)
+    6. [HTTP PATCH Request](#18)
+    7. [HTTP DELETE Request](#19)
+    8. [Remove Token](#20)
+5. [API Error Codes](#21)
+6. [Build the CA JS OAuth 2.0 library](#22)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
@@ -160,7 +160,7 @@ Developers can install a CA JS OAuth sample application as follows:
 
   MAG authorizes the user to access the protected APIs because of the available access token. The server responds with user information in JSON format, and displays it on the sample application page.
 
-<a name="13"></a>
+<a name="12"></a>
 ## CA JS OAuth 2.0 API Reference 
 Follow the steps to use the CA JS OAuth 2.0 APIs:
 
@@ -180,7 +180,7 @@ Follow the steps to use the CA JS OAuth 2.0 APIs:
 
 8. Remove Token
 
-<a name="14"></a>
+<a name="13"></a>
 ### Load and Initialize the CA JS OAuth 2.0 Library 
 
 Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as follows:
@@ -216,7 +216,7 @@ function initialize()
     );
 }
 ```
-<a name="15"></a>
+<a name="14"></a>
 ### Authorize 
 
 `jsoClient.authorize()`
@@ -252,7 +252,7 @@ function authorize()
  }
   ```
 
-<a name="16"></a>
+<a name="15"></a>
 ### HTTP GET Request 
 
 `jsoClient.get()` 
@@ -303,7 +303,7 @@ profileId).then(
     );
 ```
 
-<a name="17"></a>
+<a name="16"></a>
 ### HTTP POST Request 
 
 `jsoClient.post()`
@@ -360,7 +360,7 @@ postData).then (
     );
 ```
 
-<a name="18"></a>
+<a name="17"></a>
 ### HTTP PUT Request 
 
 `jsoClient.put()`
@@ -418,7 +418,7 @@ putData).then (
     );
 ```
 
- <a name="19"></a>
+ <a name="18"></a>
 ### HTTP PATCH Request 
 
 `jsoClient.patch()`
@@ -477,7 +477,7 @@ patchData).then (
     );
  ```
  
-<a name="20"></a>
+<a name="19"></a>
 ### HTTP DELETE Request 
 
 `jsoClient.delete()`
@@ -528,7 +528,7 @@ profileId).then (
     );
 ```
 
-<a name="21"></a>
+<a name="20"></a>
 ### Remove Token 
 
 `jsoClient.revokeToken()`
@@ -563,7 +563,7 @@ jsoClient.revokeToken(revokeConfigMap) .then (
 }
 ```
 
-<a name="22"></a>
+<a name="21"></a>
 ## API Error Codes 
 
 The following list defines the API error code and the reason why the error occurred:
@@ -579,7 +579,7 @@ Error code | Description
 -1007 | Requested API does not exist
 -1008 | Bad request or invalid input
 
- <a name="12"></a>
+ <a name="22"></a>
 ## Build the CA JS OAuth 2.0 library 
 Follow the steps to build the CA JS OAuth 2.0 library:
 
