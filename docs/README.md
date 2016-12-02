@@ -575,14 +575,14 @@ Error code | Description
 -1003 | Web Crypto is not supported
 -1004 | Error occurred due to network failure
 -1005 | Internal server error
-
- <a name="12"></a>
-## Build the CA JS OAuth 2.0 library
-Follow the steps to build the CA JS OAuth 2.0 library:
-1.	Ensure node.js is installed on your machine.
-2.	Navigate to the parent directory.
-3.	Open the terminal, and run the following command:
-	$ npm install.
 -1006 | The HTTP request failed due to invalid username and password
 -1007 | Requested API does not exist
 -1008 | Bad request or invalid input
+
+ <a name="12"></a>
+## Build the CA JS OAuth 2.0 library 
+Follow the steps to build the CA JS OAuth 2.0 library: 
+1.	Ensure node.js is installed on your machine. 
+2.	Navigate to the parent directory. 
+3.	Open the terminal, and run the following command: 
+	$ npm install.
