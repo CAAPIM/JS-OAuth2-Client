@@ -188,7 +188,6 @@ Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as
 ```
 
 jsoClient = new Cajsoc();
-}
 ```
 Initialize the jsoClient object as follows:
 
@@ -200,7 +199,7 @@ Initializes Web Crypto (to provide cryptographic operation in web applications) 
 
  A sample code is as follows:
  
-```
+```	
 <body onload='javascript:initialize();'>
 function initialize()
 {
