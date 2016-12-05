@@ -187,8 +187,7 @@ Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as
 
 ```
 
-require(["../dist/cajso.min"], function(CAJSOC) {
-    jsoClient = new CAJSOC();
+jsoClient = new Cajsoc();
 }
 ```
 Initialize the jsoClient object as follows:
