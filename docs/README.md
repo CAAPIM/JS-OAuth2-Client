@@ -454,8 +454,8 @@ A sample code is as follows:
 
 ```
 var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
- var hdrs = {}; // any custom headers required by protected service API
- var patchData = JSON.Stringify(data);
+var hdrs = {}; // any custom headers required by protected service API
+var patchData = JSON.Stringify(data);
 jsoClient.patch(
 apiURL,
 hdrs,
