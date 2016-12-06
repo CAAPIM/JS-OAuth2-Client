@@ -22,6 +22,7 @@
     7. [HTTP DELETE Request](#19)
     8. [Remove Token](#20)
 5. [API Error Codes](#21)
+6. [Build the CA JS OAuth 2.0 library](#22)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
@@ -85,7 +86,9 @@ Install the CA API Gateway and CA Mobile API Gateway and ensure that the systems
 
 Administrator registers the client on the CA OAuth Manager. For more information, how to register a client, see the Registering Clients with the OAuth Manager section in the [CA API Management OAuth Toolkit documentation](https://docops.ca.com/ca-api-management-oauth-toolkit/3-5/en/registering-clients-with-the-oauth-manager).
 
-**Note:** Ensure that the value of the OAuth 2.0 **Client Type** is public to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+**Note:** 
+- Ensure that the value of the OAuth 2.0 **Client Type** is **public** to support the implicit flow. For more information, see the [Internet Engineering Task Force](https://tools.ietf.org/html/rfc6749) guidelines.
+- The Redirect URI should be: http://<i></i>127.0.0.1:8080.
 
 <a name="8"></a>
 #### Configure CA API Gateway 
@@ -106,10 +109,6 @@ Download the JavaScript-OAuth-Library.zip file from the [GitHub location](https:
 1.  Navigate to the GitHub repository.
 
 2.  Click the Download Zip button to download the files, and then extract it to your machine.
-
-3.  The downloaded folder contains the files, and sub-folders as follows:
-
- ![CA JSO OAuth Client Folder Structure](./images/Folder_Structure.png?raw=true "Folder Structure")
   
 
 <a name="10"></a>
@@ -117,25 +116,21 @@ Download the JavaScript-OAuth-Library.zip file from the [GitHub location](https:
 
 Developers can install a CA JS OAuth sample application as follows:
 
-1.  Identify an app-server machine, for example, **app-server.example.com**, and install the Apache Tomcat version 7.0 or the latest. 
+1.  Copy the **msso_config.json** file to the **example** folder.
 
-3.  Copy the **app** folder that was downloaded as part of the CA JS OAuth 2.0 Library to the **Apache TOMCAT-INSTALLATION folder/webapps** folder.
-
-4.  Enable the HTTPS connectivity to the Apache Tomcat server.
-
-5.  Copy the **msso_config.json** file to web context of the **app** folder in the Apache Tomcat server.
     **Note:** The **msso_config.json** file is created and exported as part of the client registration on CA OAuth Manager.
 
-6.  Ensure that the **msso_config.json** file is in the same folder as the **index.html** file.
+2.  Ensure that the **msso_config.json** file is in the same folder as the **index.html** file.
 
-7.  Start the Apache Tomcat server.
+3.  Run the following command from the terminal:
+	$ npm start
 
 <a name="11"></a>
 ### Step5: Use the CA JS OAuth Sample Application 
 
 1.  On Windows desktop machine (client machine), open the CA JS OAuth sample application by providing the following address in a browser:
       
-    https://<i></i>app-server.example.com:port/app/index.html.
+    http://<i></i>127.0.0.1:8080
     
     The following illustration shows the CA JS OAuth sample application:
 
@@ -192,9 +187,7 @@ Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as
 
 ```
 
-require(["../dist/cajso.min"], function(CAJSOC) {
-    jsoClient = new CAJSOC();
-}
+jsoClient = new Cajso();
 ```
 Initialize the jsoClient object as follows:
 
@@ -206,7 +199,7 @@ Initializes Web Crypto (to provide cryptographic operation in web applications) 
 
  A sample code is as follows:
  
-```
+```	
 <body onload='javascript:initialize();'>
 function initialize()
 {
@@ -461,10 +454,8 @@ A sample code is as follows:
 
 ```
 var apiURL = configuration.oauth_demo_protected_api_endpoint_path;
- var hdrs = {}; // any custom headers required by protected service API
- var patchData = JSON.Stringify(data);
-var params = {};
-var profileID = “mag”;
+var hdrs = {}; // any custom headers required by protected service API
+var patchData = JSON.Stringify(data);
 jsoClient.patch(
 apiURL,
 hdrs,
@@ -583,3 +574,14 @@ Error code | Description
 -1006 | The HTTP request failed due to invalid username and password
 -1007 | Requested API does not exist
 -1008 | Bad request or invalid input
+
+ <a name="22"></a>
+## Build the CA JS OAuth 2.0 library 
+Follow the steps to build the CA JS OAuth 2.0 library:
+
+1.	Ensure node.js is installed on your machine.
+
+2.	Navigate to the parent directory.
+
+3.	Open the terminal, and run the following command: 
+	$ npm install.
