@@ -2,7 +2,7 @@
   "name": "ca-oauth2-client",
   "version": "1.0.0",
   "description": "CA JS OAuth 2.0 Client",
-  "main": "dist/ca-oauth2-client.js",
+  "main": "dist/cajso.js",
   "directories": {
     "doc": "doc"
   },
