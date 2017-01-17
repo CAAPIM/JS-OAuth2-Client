@@ -1,6 +1,6 @@
-# CA JavaScript OAuth Library Style Guide
+# JS OAuth 2.0 Client Style Guide
 
-This document describes JavaScript coding style/standard guide for CA JavaScript OAuth Library. 
+This document describes JavaScript coding style/standard guide for JS OAuth 2.0 Client. 
 
 ## Review ES6(ECMAScript 6) Official Coding Guidelines
 

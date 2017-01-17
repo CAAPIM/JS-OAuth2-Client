@@ -2,18 +2,18 @@
 
 ## Table of Contents
 1. [OAuth 2.0 (Open Authorization) Overview](#1)
-2. [CA JS OAuth 2.0 Library Overview](#2)
+2. [CA JS OAuth 2.0 Client Overview](#2)
 3. [Set Up the CA JS OAuth Sample Application](#3)
     1. [Step1: Review the Prerequisites](#4)
     2. [Step2: Perform the Pre Installation Tasks](#5)
          1. [Install CA API Gateway and CA Mobile API Gateway](#6)
          2. [Register a Client with the CA OAuth Manager](#7)
          3. [Configure CA API Gateway](#8)
-    3. [Step3: Download CA JS OAUTH 2.0 Library](#9)
+    3. [Step3: Download CA JS OAuth 2.0 Client](#9)
     4. [Step4: Deploy the CA JS OAuth Sample Application](#10)
     5. [Step5: Use the CA JS OAuth Sample Application](#11)
 4. [CA JS OAUTH 2.0 API Reference](#12)
-    1. [Load and Initialize the CA JS OAuth 2.0 Library](#13)
+    1. [Load and Initialize the CA JS OAuth 2.0 Client](#13)
     2. [Authorize](#14)
     3. [HTTP GET Request](#15)
     4. [HTTP POST Request](#16)
@@ -22,23 +22,23 @@
     7. [HTTP DELETE Request](#19)
     8. [Remove Token](#20)
 5. [API Error Codes](#21)
-6. [Build the CA JS OAuth 2.0 library](#22)
+6. [Build the CA JS OAuth 2.0 Client](#22)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
 
 OAuth is an authorization standard that allows one service to integrate with another service on behalf of a user. Instead of exposing user credentials, an OAuth access token is issued and accepted for user authentication. The OAuth authorization framework permits a user to grant an application (consumer) access to a protected resource without exposing the user's password credentials.
 
-The CA JS OAuth 2.0 library supports the implicit grant type.
+The CA JS OAuth 2.0 Client supports the implicit grant type.
 
 <a name="2"></a>
-## CA JS OAuth 2.0 Library Overview 
+## CA JS OAuth 2.0 Client Overview 
 
-CA JavaScript OAuth (CA JS OAuth) 2.0 library lets you implement the OAuth 2.0 implicit authorization flow in web applications. The CA JS OAuth 2.0 libraries exposes APIs that developers use to develop a web-based application. 
+CA JavaScript OAuth (CA JS OAuth) 2.0 client lets you implement the OAuth 2.0 implicit authorization flow in web applications. The CA JS OAuth 2.0 Client exposes APIs that developers use to develop a web-based application. 
 
-The CA JS OAuth 2.0 library is standards compliant, and can work with any third-party OAuth 2.0 providers such as LinkedIn, Google, and Facebook to implement the implicit flow in a browser. CA Mobile API Gateway is also one such OAuth 2.0 authorization server like Google, LinkedIn, and Facebook.
+The CA JS OAuth 2.0 Client is standards compliant, and can work with any third-party OAuth 2.0 providers such as LinkedIn, Google, and Facebook to implement the implicit flow in a browser. CA Mobile API Gateway is also one such OAuth 2.0 authorization server like Google, LinkedIn, and Facebook.
 
-The CA JS OAuth 2.0 library lets you perform the following HTTP requests:
+The CA JS OAuth 2.0 Client lets you perform the following HTTP requests:
 
 * GET
 
@@ -52,14 +52,14 @@ The CA JS OAuth 2.0 library lets you perform the following HTTP requests:
 
 <a name="3"></a>
 ## Set Up the CA JS OAuth Sample Application 
-The CA JS OAuth 2.0 sample application uses the CA JS OAuth library, and interacts with _CA Mobile API Gateway_ (MAG) OAuth 2.0 endpoints to obtain the access token. Then, the sample application presents the token to access the protected resource **(/oauth/v2/protectedapi*)** on the MAG.
+The CA JS OAuth 2.0 sample application uses the CA JS OAuth 2.0 Client, and interacts with _CA Mobile API Gateway_ (MAG) OAuth 2.0 endpoints to obtain the access token. Then, the sample application presents the token to access the protected resource **(/oauth/v2/protectedapi*)** on the MAG.
 
 The following steps describe how to set up the sample application to work with MAG:
 For more information about CA Mobile API Gateway, see the MAG [documentation](https://docops.ca.com/display/MAG32).
 
 <a name="4"></a>
 ### Step1: Review the Prerequisites 
-Before integrating the CA JS OAuth 2.0 library with your web application, ensure that your integration environment meets the following server requirements:
+Before integrating the CA JS OAuth 2.0 Client with your web application, ensure that your integration environment meets the following server requirements:
 
 * CA API Gateway version 9.1
 
@@ -100,11 +100,11 @@ Administrator can configure CA API Gateway as follows:
 2.  Enable _Cross-Origin Resource Sharing_ (CORS) on the protected API *(/oauth/v2/protectedapi*)* using the Process CORS Request assertion. For more information, see the [Process CORS Request Assertion](https://docops.ca.com/ca-api-gateway/9-1/en/policy-assertions/assertion-palette/access-control-assertions/process-cors-request-assertion) in the CA API Gateway documentation.
 
 <a name="9"></a>
-### Step3: Download CA JS OAuth 2.0 Library
+### Step3: Download CA JS OAuth 2.0 Client
 
-To download the CA JS OAuth 2.0 library to your machine, follow these steps:
+To download the CA JS OAuth 2.0 Client to your machine, follow these steps:
 
-Download the JavaScript-OAuth-Library.zip file from the [GitHub location](https://github.com/CAAPIM/JS-OAuth-Library) to a folder on your machine and extract the files.
+Download the JS-OAuth2-Client.zip file from the [GitHub location](https://github.com/CAAPIM/JS-OAuth2-Client) to a folder on your machine and extract the files.
 
 1.  Navigate to the GitHub repository.
 
@@ -164,7 +164,7 @@ Developers can install a CA JS OAuth sample application as follows:
 ## CA JS OAuth 2.0 API Reference 
 Follow the steps to use the CA JS OAuth 2.0 APIs:
 
-1. Load and initialize the CA JS OAuth 2.0 library
+1. Load and initialize the CA JS OAuth 2.0 Client
  
 2. Authorize 
 
@@ -181,9 +181,9 @@ Follow the steps to use the CA JS OAuth 2.0 APIs:
 8. Remove Token
 
 <a name="13"></a>
-### Load and Initialize the CA JS OAuth 2.0 Library 
+### Load and Initialize the CA JS OAuth 2.0 Client 
 
-Load an instance of the jsoClient object to start the CA JS OAuth 2.0 library as follows:
+Load an instance of the jsoClient object to start the CA JS OAuth 2.0 Client as follows:
 
 ```
 
@@ -219,7 +219,7 @@ function initialize()
 
 `jsoClient.authorize()`
 
-Authorizes the CA JS OAuth 2.0 library to obtain the access token that is used to access the protected resource.
+Authorizes the CA JS OAuth 2.0 Client to obtain the access token that is used to access the protected resource.
 The syntax is as follows:
 
 `jsoClient.authorize(profileId, configMap)`
@@ -278,7 +278,7 @@ Specifies the parameters that is sent as a request parameter.
 **profileId**
 
 Defines the profile name for which the OAuth authorization starts.
-This API must be called after the successful authorization of the CA JS OAuth library.
+This API must be called after the successful authorization of the CA JS OAuth 2.0 Client.
 
 A sample code is as follows:
 
@@ -576,8 +576,8 @@ Error code | Description
 -1008 | Bad request or invalid input
 
  <a name="22"></a>
-## Build the CA JS OAuth 2.0 library 
-Follow the steps to build the CA JS OAuth 2.0 library:
+## Build the CA JS OAuth 2.0 Client 
+Follow the steps to build the CA JS OAuth 2.0 Client:
 
 1.	Ensure node.js is installed on your machine.
 
