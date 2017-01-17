@@ -1,5 +1,5 @@
 {
-  "name": "cajso",
+  "name": "ca-oauth2-client",
   "version": "0.0.0-development",
   "description": "JS OAuth Library",
   "main": "dist/cajso.js",
@@ -37,7 +37,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CAAPIM/JS-OAuth-Library.git"
+    "url": "https://github.com/CAAPIM/JS-OAuth2-Client.git"
   },
   "keywords": [
     "cajso",

@@ -1,11 +1,11 @@
-# Contribute to JS OAuth Client Library
+# Contribute to CA JS OAuth 2.0 Client
 Contributions are welcome and much appreciated. Just follow these easy steps to contribute.
 
 ## Code Standard and Guideline
-For consistency, we ask that you adhere to some basic code guidelines when contributing to JS OAuth Client Library. See the [Code Standard and Guideline][guidelines] for details.
+For consistency, we ask that you adhere to some basic code guidelines when contributing to CA JS OAuth 2.0 Client. See the [Code Standard and Guideline][guidelines] for details.
 
 ## Our Development Process
-To continue improving the library, the JS OAuth Client Library development team will work on the same GitHub repos as you. The `develop branch` is used for development, and the `master branch` is used only for stable releases.
+To continue improving the library, the CA JS OAuth 2.0 Client development team will work on the same GitHub repos as you. The `develop branch` is used for development, and the `master branch` is used only for stable releases.
 **Note:** For production environments, please use releases only from the master branch.
 
 ### Pull Requests
@@ -22,7 +22,7 @@ Follow these steps for pull requests:
 ### Contributor License Agreement ("CLA")
 To accept pull requests, submit a CLA. (Submitting a single CLA lets you work on any open source projects from CA, Inc.)
 
-Complete your CLA here: <https://www.clahub.com/agreements/CAAPIM/JS-OAuth-Library>
+Complete your CLA here: <https://www.clahub.com/agreements/CAAPIM/JS-OAuth2-Client>
 
 ## Bugs
 We work hard to avoid them, but they still happen. If you're a CA customer, open an issue in our [Support Page][casupport], otherwise use GitHub issues.
@@ -43,12 +43,12 @@ Before filing a new issue, check Known Issues to see if your problem already exi
 * Anything else that seems relevant. 
 
 ## License
-By contributing to JS OAuth Client Library, you agree that your contributions will be licensed under its [license][license-link].
+By contributing to CA JS OAuth 2.0 Client, you agree that your contributions will be licensed under its [license][license-link].
 
 
  [guidelines]: /GUIDELINES.md
  [community]: https://communities.ca.com/community/ca-api-management-community/content?filterID=contentstatus%5Bpublished%5D~category%5Bca-mobile-api-gateway%5D
  [license-link]: /LICENSE
- [cla]: https://www.clahub.com/agreements/CAAPIM/JS-OAuth-Library
+ [cla]: https://www.clahub.com/agreements/CAAPIM/JS-OAuth2-Client
  [casupport]: https://support.ca.com/irj/portal/implsvcnewcase
  
