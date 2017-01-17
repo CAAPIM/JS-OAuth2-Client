@@ -30,7 +30,6 @@
     "build:example": "gulp example",
     "prestart": "npm run build:example",
     "start": "http-server example -p 8080",
-    "prepublish": "npm run build",
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
     "release": "semantic-release pre && npm publish && semantic-release post"
