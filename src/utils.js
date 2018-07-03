@@ -207,7 +207,7 @@ function do_configuration(c)
   getTokenFromURLFragment(profileId);
 }
 /*********** Create and send authorization request *************/
-function doAuthorize(profileId, configMap)
+function doAuthorize(profileId, configMap, idToken)
 {
   let state, req, authURL,i;
   let encodedParams = '';
@@ -220,9 +220,19 @@ function doAuthorize(profileId, configMap)
     req = { 'response_type' : 'token' };
   }
   req.state = state;
+  req.display = 'template';
   req['redirect_uri'] = configMap['redirect_uri'];
   req['client_id'] = configMap['client_id'];
   req['scope'] = configMap['scope'].join(' ');
+
+  if (idToken) {
+    req['prompt'] = 'none';
+    req['id_token_hint'] = idToken;
+  }
+
+  if (isJSSDKFlag) {
+    req['display'] = 'jssdk';
+  }
 
   let j = 0;
   for (i in req)
@@ -427,13 +437,13 @@ function saveEncToken(cbparams)
   localStorage.setItem('t-' + cbparams['profileId'], JSON.stringify(tokens));
 }
 /************ Check whether token present before authorization ****************/
-function retrieveToken(profileId, configMap)
+function retrieveToken(profileId, configMap, idToken)
 {
   let token;
   token = getToken(profileId, configMap['scope']);
   if (!token)
   {
-    doAuthorize(profileId, configMap);
+    doAuthorize(profileId, configMap, idToken);
     return false;
   }
   return true;
@@ -635,5 +645,84 @@ function do_clear(revokeConfigMap)
         }
       );
     }
+  });
+}
+/************* Retrieve the oauth parameters from configuration **************/
+function getOAuthParams(configURL,profileId) {
+  return new Promise(function (resolve, reject) {
+    if (!configURL.trim())
+    {
+        configURL = 'msso_config.json';
+    }
+    var oauth_config;
+    var config_internal;
+    // XMLHttpRequest
+    var xhttp;
+    // code for modern browsers
+    if (window.XMLHttpRequest)
+    {
+      xhttp = new XMLHttpRequest();
+    }
+    // code for IE6, IE5
+    else
+    {
+      xhttp = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    xhttp.onreadystatechange = function()
+    {
+      if (xhttp.readyState == 4 && xhttp.status == 200)
+      {
+        oauth_config = JSON.parse(xhttp.responseText);
+        server = oauth_config.server;
+        server.prefix = oauth_config.server.prefix;
+        config_internal  = oauth_config.oauth.client.client_ids[0];
+        if(!config_internal)
+        {
+          console.error('Missing OAuth config parameters');
+          reject(Missing_OAuth_config_error);
+        }
+        if(!oauth_config.oauth.system_endpoints.authorization_endpoint_path ||
+          !oauth_config.server.hostname || !oauth_config.server.port)
+        {
+          console.error('Invalid OAuth authorization URI: ' + 'https://' + oauth_config.server.hostname + ':' +
+             oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path);
+          reject(Invalid_OAuth_URI)
+        }
+        if(!server.prefix) {
+          config_internal.authorization = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
+          config_internal.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
+          config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
+          config_internal.getAuthId = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
+          config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+        }
+        else {
+          config_internal.authorization = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
+          config_internal.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
+          config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
+          config_internal.getAuthId = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
+          config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+        }
+        config_internal.state = stateID();
+        config_internal.scope = config_internal.scope.split(' ');
+        config_internal.profileId = profileId;
+        resolve(config_internal);
+      }
+    };
+    xhttp.open('GET',configURL, true);
+    xhttp.send();
   });
 }
