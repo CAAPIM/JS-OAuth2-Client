@@ -27,6 +27,7 @@ let decryptedToken;
 let isDebug = false; //global debug state
 let configuration = {};
 let server = {};
+let isJSSDKFlag = false;
 
 // we instantiate with the global switch
 let debug;
@@ -34,29 +35,37 @@ let debug;
 const cajso = function()
 {
   //----------- Public Methods -----------//
-  this.init = () => {
+  this.init = (configURL, profileId, isJSSDK) => {
     debug = Debugger(isDebug);
+    isJSSDKFlag = isJSSDK;
     return new Promise((resolve, reject) => {
-      cryptoInit().then(() => {
-        // page handling redirection will also call init, so retrieve token if available
-        // from URL Fragment. In either case, call initCallback...
-        getTokenFromURLFragment().then(
-                  (state) => {
-                    resolve(state);
-                  }, (errObj) => {
-                    reject(errObj);
-                  });
+      getOAuthParams(configURL, profileId).then((config) => {
+        configuration = config;
+        cryptoInit().then(() => {
+          // page handling redirection will also call init, so retrieve token if available
+          // from URL Fragment. In either case, call initCallback...
+          getTokenFromURLFragment().then((state) => {
+            resolve(state);
+          }, (errObj) => {
+            reject(errObj);
+          });
         }, (msg) => {
           let errObj = CRYPO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         });
+      }, (errObj) => {
+          reject(errObj);
       });
-    }
+    });
+  }
   // Fetch the token from local storage if available, or do the authorization
   // dance to get a token from auth server...
   this.authorize = (profileId, configMap) =>
     retrieveToken(profileId, configMap);
+
+  this.loginWithIDToken = (profileId, configMap, idToken) =>
+    retrieveToken(profileId, configMap, idToken);
 
   this.get = (apiURL, hdrs,params, profileId) =>
     performHttpOp('GET', apiURL, hdrs,params, profileId);
