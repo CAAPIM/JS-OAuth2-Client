@@ -67,20 +67,20 @@ const cajso = function()
   this.loginWithIDToken = (profileId, configMap, idToken) =>
     retrieveToken(profileId, configMap, idToken);
 
-  this.get = (apiURL, hdrs,params, profileId) =>
-    performHttpOp('GET', apiURL, hdrs,params, profileId);
+  this.get = (apiURL, hdrs,params, profileId, bearer) =>
+    performHttpOp('GET', apiURL, hdrs,params, profileId, bearer);
 
-  this.post = (apiURL,hdrs,params, profileId, postData) =>
-    performHttpOp('POST', apiURL, hdrs,params, profileId, postData);
+  this.post = (apiURL,hdrs,params, profileId, bearer, postData) =>
+    performHttpOp('POST', apiURL, hdrs,params, profileId, bearer, postData);
 
-  this.put = (apiURL, hdrs,params, profileId, putData) =>
-    performHttpOp('PUT', apiURL, hdrs,params, profileId, putData);
+  this.put = (apiURL, hdrs,params, profileId, bearer, putData) =>
+    performHttpOp('PUT', apiURL, hdrs,params, profileId, bearer, putData);
 
-  this.patch = (apiURL, hdrs,params, profileId, patchData) =>
-    performHttpOp('PATCH', apiURL, hdrs,params, profileId, patchData);
+  this.patch = (apiURL, hdrs,params, profileId, bearer, patchData) =>
+    performHttpOp('PATCH', apiURL, hdrs,params, profileId, bearer, patchData);
 
-  this.delete = (apiURL, hdrs,params, profileId) =>
-    performHttpOp('DELETE', apiURL, hdrs,params, profileId);
+  this.delete = (apiURL, hdrs,params, profileId, bearer) =>
+    performHttpOp('DELETE', apiURL, hdrs,params, profileId, bearer);
 
   this.isTokenAvailable = profileId =>
   {
@@ -93,6 +93,9 @@ const cajso = function()
 
   this.getState = profileId =>
     getStateFromProfileId(profileId);
+
+  this.getConfig = () =>
+    getConfig();
 
   _jsoclient_instance_ = this;
 };
