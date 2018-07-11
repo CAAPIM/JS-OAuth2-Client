@@ -212,7 +212,7 @@ function doAuthorize(profileId, configMap, idToken)
   let state, req, authURL,i;
   let encodedParams = '';
   state = configMap['state'];
-  if(configMap['idTokenRequired'] && configMap['idTokenRequired'] === true) {
+  if(configMap['idTokenRequired'] && configMap['idTokenRequired'] === true || idToken) {
     req = { 'response_type' : 'token id_token' };
     req['nonce'] = getNonce();
   }
@@ -253,13 +253,15 @@ function doAuthorize(profileId, configMap, idToken)
   window.location = authURL;
 }
 
-function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
+function performHttpOp(Op, apiURL, hdrs,params,profileId, bearer, payload)
 {
   function performAPICall(decryptedToken)
   {
-    const dt = decryptedToken.replace(/\0[\s\S]*$/g,'');
-    let authHeader = 'Bearer ' + encodeURIComponent(new String(dt));
-    hdrs.push({key:'Authorization',value:authHeader});
+    if(bearer) {
+      const dt = decryptedToken.replace(/\0[\s\S]*$/g,'');
+      let authHeader = 'Bearer ' + encodeURIComponent(new String(dt));
+      hdrs.push({key:'Authorization',value:authHeader});
+    }
     let encodedParams='';
     if(params) {
       let j = 0;
@@ -276,29 +278,36 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
   // First do some basic checks. Like token present? What about scopes for the
   // Op under consideration?
   return new Promise ((resolve,reject) => {
-    let token = getToken(profileId);
-    if (!token)
-    {
-      debug.info("Token Error");
-      reject(TOKEN_ERROR);
-    }
-    else// since token is present, go for API Call
-    {
-      // decrypt the encrypted token and carry on with the XHR call by invoking the callback
-      decryptToken(token.access_token).then(
-        (decToken) => {
-          performAPICall(decToken).then(
-            (data) => resolve(data),
-            (err) => reject(err)
-            );
-        },
-        (msg) => {
-          debug.info(msg);
-          let errObj = CRYPO_ERROR;
-          errObj.errMsg = msg;
-          reject(errObj);
-        }
-      );
+    if (bearer) {
+      let token = getToken(profileId);
+      if (!token)
+      {
+        debug.info("Token Error");
+        reject(TOKEN_ERROR);
+      }
+      else// since token is present, go for API Call
+      {
+        // decrypt the encrypted token and carry on with the XHR call by invoking the callback
+        decryptToken(token.access_token).then(
+          (decToken) => {
+            performAPICall(decToken).then(
+              (data) => resolve(data),
+              (err) => reject(err)
+              );
+          },
+          (msg) => {
+            debug.info(msg);
+            let errObj = CRYPO_ERROR;
+            errObj.errMsg = msg;
+            reject(errObj);
+          }
+        );
+      }
+    } else {
+      performAPICall().then(
+        (data) => resolve(data),
+        (err) => reject(err)
+        );
     }
   });
 }
@@ -312,6 +321,10 @@ function getStateFromProfileId(profileId) {
     return tokItems.state;
   } else return;
 
+}
+
+function getConfig() {
+  return configuration;
 }
 
 function getNonce()
@@ -716,7 +729,7 @@ function getOAuthParams(configURL,profileId) {
           config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
         }
-        config_internal.state = stateID();
+        config_internal.state = getNonce();
         config_internal.scope = config_internal.scope.split(' ');
         config_internal.profileId = profileId;
         resolve(config_internal);
@@ -725,11 +738,4 @@ function getOAuthParams(configURL,profileId) {
     xhttp.open('GET',configURL, true);
     xhttp.send();
   });
-} 
-/************* Create a stateID string **************/
-function stateID() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4()+ s4() + s4();
 }
