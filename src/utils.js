@@ -714,6 +714,22 @@ function getOAuthParams(configURL,profileId) {
             oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
           config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+          config_internal.createAID = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.create_authid_endpoint_path;
+          config_internal.deleteAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.delete_authid_endpoint_path;
+          config_internal.disableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.disable_authid_endpoint_path;
+          config_internal.downloadAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.enableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.enable_authid_endpoint_path;
+          config_internal.fetchAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.fetch_authid_endpoint_path;
+          config_internal.reissueAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.reissue_authid_endpoint_path;
+          config_internal.resetAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.reset_authid_endpoint_path;
         }
         else {
           config_internal.authorization = 'https://' + oauth_config.server.hostname + ':' +
@@ -728,6 +744,22 @@ function getOAuthParams(configURL,profileId) {
             oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
           config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+          config_internal.createAID = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.create_authid_endpoint_path;
+          config_internal.deleteAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.delete_authid_endpoint_path;
+          config_internal.disableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.disable_authid_endpoint_path;
+          config_internal.downloadAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.enableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.enable_authid_endpoint_path;
+          config_internal.fetchAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.fetch_authid_endpoint_path;
+          config_internal.reissueAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.reissue_authid_endpoint_path;
+          config_internal.resetAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.reset_authid_endpoint_path;
         }
         config_internal.state = getNonce();
         config_internal.scope = config_internal.scope.split(' ');
