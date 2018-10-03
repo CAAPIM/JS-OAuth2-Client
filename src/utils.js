@@ -32,6 +32,17 @@ let INVALID_CREDENTIALS;
 let API_NOT_FOUND;
 let BAD_REQUEST;
 /**********  Utility Functions  **************/
+
+// check valid json
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 // util for creating XHRRequests
 function xhrUtil(url,method,headers,profileId,data)
 {
@@ -64,8 +75,12 @@ function xhrUtil(url,method,headers,profileId,data)
         debug.info('Success. Status:'+ xhttp.status);
         let data = {};
         data.httpStatus = xhttp.status;
-        if (xhttp.status != 204) {// only if there is response
-          data.data=JSON.parse(xhttp.responseText)
+        if (xhttp.status != 204) {
+          // only if there is response
+          if(IsJsonString(xhttp.responseText))
+            _data.data = JSON.parse(xhttp.responseText);
+          else
+            _data.data = xhttp.responseText;
         } else {
           data.data=''
         }
@@ -97,11 +112,22 @@ function xhrUtil(url,method,headers,profileId,data)
           {
             errCode = network_errCode;
           }
-          let errObj = {};
-          let errMsg;
 
+          let errObj = {};
+          let errHeadersObj = new Object();
+          const errHeaders = xhttp.getAllResponseHeaders().toLowerCase().split('\n');
 
           errObj.httpStatus = xhttp.status;
+
+          for (const thisItem of errHeaders) {
+            const key = thisItem.substring(0, thisItem.indexOf(':'));
+            const value = thisItem.substring(thisItem.indexOf(':')+1).trim();
+            if (errHeadersObj[key] != "" && value != "")
+              errHeadersObj[key] = value;
+          }
+
+          errObj.headers = errHeadersObj;
+
           if (xhttp.responseText) {
             errObj.errMsg = JSON.parse(xhttp.responseText);
           } else {
