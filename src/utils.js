@@ -33,6 +33,26 @@ let API_NOT_FOUND;
 let BAD_REQUEST;
 /**********  Utility Functions  **************/
 
+// remove duplicate headers
+
+function removeDuplicates(originalArray, objKey) {
+  var trimmedArray = [];
+  var values = [];
+  var value;
+
+  for(var i = 0; i < originalArray.length; i++) {
+    value = originalArray[i][objKey];
+
+    if(values.indexOf(value) === -1) {
+      trimmedArray.push(originalArray[i]);
+      values.push(value);
+    }
+  }
+
+  return trimmedArray;
+
+}
+
 // check valid json
 function IsJsonString(str) {
     try {
@@ -47,6 +67,9 @@ function IsJsonString(str) {
 function xhrUtil(url,method,headers,profileId,data)
 {
   return new Promise((resolve, reject) => {
+
+    headers = removeDuplicates(headers, 'key');
+
     let xhttp;
     try
     {
@@ -235,7 +258,7 @@ function do_configuration(c)
 /*********** Create and send authorization request *************/
 function doAuthorize(profileId, configMap, idToken)
 {
-  let state, req, authURL,i;
+  let state, req, authURL;
   let encodedParams = '';
   state = configMap['state'];
   if(configMap['idTokenRequired'] && configMap['idTokenRequired'] === true || idToken) {
@@ -260,7 +283,7 @@ function doAuthorize(profileId, configMap, idToken)
     req['display'] = 'jssdk';
   }
 
-  let j = 0;
+  let j = 0; let i; 
   for (i in req)
   {
     encodedParams += (j++ === 0 ? '?' : '&') + encodeURIComponent(i) + '='
@@ -734,8 +757,6 @@ function getOAuthParams(configURL,profileId) {
             oauth_config.server.port + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
           config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
-          config_internal.getAuthId = 'https://' + oauth_config.server.hostname + ':' +
-            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
           config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
           config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
@@ -764,8 +785,6 @@ function getOAuthParams(configURL,profileId) {
             oauth_config.server.port +"/" + server.prefix + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
           config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
-          config_internal.getAuthId = 'https://' + oauth_config.server.hostname + ':' +
-            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
           config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
             oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
           config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
