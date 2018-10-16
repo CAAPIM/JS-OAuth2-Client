@@ -78,9 +78,9 @@ function xhrUtil(url,method,headers,profileId,data)
         if (xhttp.status != 204) {
           // only if there is response
           if(IsJsonString(xhttp.responseText))
-            _data.data = JSON.parse(xhttp.responseText);
+            data.data = JSON.parse(xhttp.responseText);
           else
-            _data.data = xhttp.responseText;
+            data.data = xhttp.responseText;
         } else {
           data.data=''
         }
