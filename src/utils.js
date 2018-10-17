@@ -313,7 +313,7 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, bearer, payload)
     }
     let encodedParams='';
     if(params) {
-      let j = 0;
+      let j = 0; let i = 0;
       for (i in params)
       {
         encodedParams += (j++ === 0 ? '?' : '&') + encodeURIComponent(i) + '='
