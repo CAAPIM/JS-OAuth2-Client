@@ -50,7 +50,7 @@ const cajso = function()
             reject(errObj);
           });
         }, (msg) => {
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         });
