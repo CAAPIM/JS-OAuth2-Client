@@ -332,7 +332,9 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, bearer, payload)
       if (!token)
       {
         debug.info("Token Error");
-        reject(TOKEN_ERROR);
+        var errObj = TOKEN_ERROR;
+        errObj.errMsg = "User not logged in";
+        reject(errObj);
       }
       else// since token is present, go for API Call
       {
@@ -346,7 +348,7 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, bearer, payload)
           },
           (msg) => {
             debug.info(msg);
-            let errObj = CRYPO_ERROR;
+            let errObj = CRYPTO_ERROR;
             errObj.errMsg = msg;
             reject(errObj);
           }
@@ -471,7 +473,7 @@ function getTokenFromURLFragment()
       encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);},
         (msg) => {
           debug.info(msg);
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         });
@@ -701,7 +703,7 @@ function do_clear(revokeConfigMap)
         },
         (msg) => {
           debug.info(msg);
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         }
