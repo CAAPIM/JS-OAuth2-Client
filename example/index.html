@@ -43,7 +43,7 @@ of the MIT license. See the LICENSE file for details.
         // Get the OAuth related config params and prepare a configMap
         getOAuthParams("msso_config.json", profileId);
         //jsoClient.init(configURL);
-        var p = jsoClient.init();
+        var p = jsoClient.init("msso_config.json");
         p.then((msg) => {console.log(msg);}, (err) => {
           document.getElementById('httpContainer').style.visibility= "visible";
           //---- Handle error ----//
@@ -76,7 +76,7 @@ of the MIT license. See the LICENSE file for details.
         var params;
         document.getElementById('responseText').style.visibility= "visible";
         document.getElementById('httpContainer').style.visibility= "visible";
-        jsoClient.get(apiURL, hdrs, params, profileId).then(
+        jsoClient.get(apiURL, hdrs, params, profileId, true).then(
           //---- SUCCESS Callback ----//
           function(data){
             //---- Handle data ----//
@@ -110,7 +110,7 @@ of the MIT license. See the LICENSE file for details.
         document.getElementById('responseText').style.visibility= "visible";
         document.getElementById('httpContainer').style.visibility= "visible";
         var postData = document.getElementById('fd').value;
-        jsoClient.post(apiURL, hdrs, params, profileId, postData).then(
+        jsoClient.post(apiURL, hdrs, params, profileId, true, postData).then(
           //---- SUCCESS Callback ----//
           function(data){
             //---- Handle data ----//
@@ -134,7 +134,7 @@ of the MIT license. See the LICENSE file for details.
         document.getElementById('responseText').style.visibility= "visible";
         document.getElementById('httpContainer').style.visibility= "visible";
         var putData = document.getElementById('fd').value;
-        jsoClient.put(apiURL, hdrs,params, profileId, putData).then(
+        jsoClient.put(apiURL, hdrs,params, profileId, true, putData).then(
           //---- SUCCESS Callback ----//
           function(data){
             //---- Handle data ----//
@@ -158,7 +158,7 @@ of the MIT license. See the LICENSE file for details.
         document.getElementById('responseText').style.visibility= "visible";
         document.getElementById('httpContainer').style.visibility= "visible";
         var patchData = document.getElementById('fd').value;
-        jsoClient.patch(apiURL, hdrs,params, profileId, patchData).then(
+        jsoClient.patch(apiURL, hdrs,params, profileId, true, patchData).then(
           //---- SUCCESS Callback ----//
           function(data){
             //---- Handle data ----//
@@ -181,7 +181,7 @@ of the MIT license. See the LICENSE file for details.
         var params;
         document.getElementById('responseText').style.visibility= "visible";
         document.getElementById('httpContainer').style.visibility= "visible";
-        jsoClient.delete(apiURL, hdrs,params, profileId).then(
+        jsoClient.delete(apiURL, hdrs,params, profileId, true).then(
           //---- SUCCESS Callback ----//
           function(data){
             //---- Handle data ----//
