@@ -1,6 +1,6 @@
 {
   "name": "ca-oauth2-client",
-  "version": "0.0.0-development",
+  "version": "3.0.0",
   "description": "JS OAuth Library",
   "main": "dist/cajso.js",
   "directories": {
