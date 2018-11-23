@@ -32,10 +32,44 @@ let INVALID_CREDENTIALS;
 let API_NOT_FOUND;
 let BAD_REQUEST;
 /**********  Utility Functions  **************/
+
+// remove duplicate headers
+
+function removeDuplicates(originalArray, objKey) {
+  var trimmedArray = [];
+  var values = [];
+  var value;
+
+  for(var i = 0; i < originalArray.length; i++) {
+    value = originalArray[i][objKey];
+
+    if(values.indexOf(value) === -1) {
+      trimmedArray.push(originalArray[i]);
+      values.push(value);
+    }
+  }
+
+  return trimmedArray;
+
+}
+
+// check valid json
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 // util for creating XHRRequests
 function xhrUtil(url,method,headers,profileId,data)
 {
   return new Promise((resolve, reject) => {
+
+    headers = removeDuplicates(headers, 'key');
+
     let xhttp;
     try
     {
@@ -64,8 +98,12 @@ function xhrUtil(url,method,headers,profileId,data)
         debug.info('Success. Status:'+ xhttp.status);
         let data = {};
         data.httpStatus = xhttp.status;
-        if (xhttp.status != 204) {// only if there is response
-          data.data=JSON.parse(xhttp.responseText)
+        if (xhttp.status != 204) {
+          // only if there is response
+          if(IsJsonString(xhttp.responseText))
+            data.data = JSON.parse(xhttp.responseText);
+          else
+            data.data = xhttp.responseText;
         } else {
           data.data=''
         }
@@ -97,11 +135,22 @@ function xhrUtil(url,method,headers,profileId,data)
           {
             errCode = network_errCode;
           }
-          let errObj = {};
-          let errMsg;
 
+          let errObj = {};
+          let errHeadersObj = new Object();
+          const errHeaders = xhttp.getAllResponseHeaders().toLowerCase().split('\n');
 
           errObj.httpStatus = xhttp.status;
+
+          for (const thisItem of errHeaders) {
+            const key = thisItem.substring(0, thisItem.indexOf(':'));
+            const value = thisItem.substring(thisItem.indexOf(':')+1).trim();
+            if (errHeadersObj[key] != "" && value != "")
+              errHeadersObj[key] = value;
+          }
+
+          errObj.headers = errHeadersObj;
+
           if (xhttp.responseText) {
             errObj.errMsg = JSON.parse(xhttp.responseText);
           } else {
@@ -207,12 +256,12 @@ function do_configuration(c)
   getTokenFromURLFragment(profileId);
 }
 /*********** Create and send authorization request *************/
-function doAuthorize(profileId, configMap)
+function doAuthorize(profileId, configMap, idToken)
 {
-  let state, req, authURL,i;
+  let state, req, authURL;
   let encodedParams = '';
   state = configMap['state'];
-  if(configMap['idTokenRequired'] && configMap['idTokenRequired'] === true) {
+  if(configMap['idTokenRequired'] && configMap['idTokenRequired'] === true || idToken) {
     req = { 'response_type' : 'token id_token' };
     req['nonce'] = getNonce();
   }
@@ -220,11 +269,21 @@ function doAuthorize(profileId, configMap)
     req = { 'response_type' : 'token' };
   }
   req.state = state;
+  req.display = 'template';
   req['redirect_uri'] = configMap['redirect_uri'];
   req['client_id'] = configMap['client_id'];
   req['scope'] = configMap['scope'].join(' ');
 
-  let j = 0;
+  if (idToken) {
+    req['prompt'] = 'none';
+    req['id_token_hint'] = idToken;
+  }
+
+  if (isJSSDKFlag) {
+    req['display'] = 'jssdk';
+  }
+
+  let j = 0; let i; 
   for (i in req)
   {
     encodedParams += (j++ === 0 ? '?' : '&') + encodeURIComponent(i) + '='
@@ -243,16 +302,18 @@ function doAuthorize(profileId, configMap)
   window.location = authURL;
 }
 
-function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
+function performHttpOp(Op, apiURL, hdrs,params,profileId, bearer, payload)
 {
   function performAPICall(decryptedToken)
   {
-    const dt = decryptedToken.replace(/\0[\s\S]*$/g,'');
-    let authHeader = 'Bearer ' + encodeURIComponent(new String(dt));
-    hdrs.push({key:'Authorization',value:authHeader});
+    if(bearer) {
+      const dt = decryptedToken.replace(/\0[\s\S]*$/g,'');
+      let authHeader = 'Bearer ' + encodeURIComponent(new String(dt));
+      hdrs.push({key:'Authorization',value:authHeader});
+    }
     let encodedParams='';
     if(params) {
-      let j = 0;
+      let j = 0; let i = 0;
       for (i in params)
       {
         encodedParams += (j++ === 0 ? '?' : '&') + encodeURIComponent(i) + '='
@@ -266,29 +327,38 @@ function performHttpOp(Op, apiURL, hdrs,params,profileId, payload)
   // First do some basic checks. Like token present? What about scopes for the
   // Op under consideration?
   return new Promise ((resolve,reject) => {
-    let token = getToken(profileId);
-    if (!token)
-    {
-      debug.info("Token Error");
-      reject(TOKEN_ERROR);
-    }
-    else// since token is present, go for API Call
-    {
-      // decrypt the encrypted token and carry on with the XHR call by invoking the callback
-      decryptToken(token.access_token).then(
-        (decToken) => {
-          performAPICall(decToken).then(
-            (data) => resolve(data),
-            (err) => reject(err)
-            );
-        },
-        (msg) => {
-          debug.info(msg);
-          let errObj = CRYPO_ERROR;
-          errObj.errMsg = msg;
-          reject(errObj);
-        }
-      );
+    if (bearer) {
+      let token = getToken(profileId);
+      if (!token)
+      {
+        debug.info("Token Error");
+        var errObj = TOKEN_ERROR;
+        errObj.errMsg = "User not logged in";
+        reject(errObj);
+      }
+      else// since token is present, go for API Call
+      {
+        // decrypt the encrypted token and carry on with the XHR call by invoking the callback
+        decryptToken(token.access_token).then(
+          (decToken) => {
+            performAPICall(decToken).then(
+              (data) => resolve(data),
+              (err) => reject(err)
+              );
+          },
+          (msg) => {
+            debug.info(msg);
+            let errObj = CRYPTO_ERROR;
+            errObj.errMsg = msg;
+            reject(errObj);
+          }
+        );
+      }
+    } else {
+      performAPICall().then(
+        (data) => resolve(data),
+        (err) => reject(err)
+        );
     }
   });
 }
@@ -302,6 +372,10 @@ function getStateFromProfileId(profileId) {
     return tokItems.state;
   } else return;
 
+}
+
+function getConfig() {
+  return configuration;
 }
 
 function getNonce()
@@ -399,7 +473,7 @@ function getTokenFromURLFragment()
       encryptToken(token['access_token'],cbparams).then(() => {resolve(state.state);},
         (msg) => {
           debug.info(msg);
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         });
@@ -427,13 +501,13 @@ function saveEncToken(cbparams)
   localStorage.setItem('t-' + cbparams['profileId'], JSON.stringify(tokens));
 }
 /************ Check whether token present before authorization ****************/
-function retrieveToken(profileId, configMap)
+function retrieveToken(profileId, configMap, idToken)
 {
   let token;
   token = getToken(profileId, configMap['scope']);
   if (!token)
   {
-    doAuthorize(profileId, configMap);
+    doAuthorize(profileId, configMap, idToken);
     return false;
   }
   return true;
@@ -629,11 +703,118 @@ function do_clear(revokeConfigMap)
         },
         (msg) => {
           debug.info(msg);
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         }
       );
     }
+  });
+}
+/************* Retrieve the oauth parameters from configuration **************/
+function getOAuthParams(configURL,profileId) {
+  return new Promise(function (resolve, reject) {
+    if (!configURL.trim())
+    {
+        configURL = 'msso_config.json';
+    }
+    var oauth_config;
+    var config_internal;
+    // XMLHttpRequest
+    var xhttp;
+    // code for modern browsers
+    if (window.XMLHttpRequest)
+    {
+      xhttp = new XMLHttpRequest();
+    }
+    // code for IE6, IE5
+    else
+    {
+      xhttp = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    xhttp.onreadystatechange = function()
+    {
+      if (xhttp.readyState == 4 && xhttp.status == 200)
+      {
+        oauth_config = JSON.parse(xhttp.responseText);
+        server = oauth_config.server;
+        server.prefix = oauth_config.server.prefix;
+        config_internal  = oauth_config.oauth.client.client_ids[0];
+        if(!config_internal)
+        {
+          console.error('Missing OAuth config parameters');
+          reject(Missing_OAuth_config_error);
+        }
+        if(!oauth_config.oauth.system_endpoints.authorization_endpoint_path ||
+          !oauth_config.server.hostname || !oauth_config.server.port)
+        {
+          console.error('Invalid OAuth authorization URI: ' + 'https://' + oauth_config.server.hostname + ':' +
+             oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path);
+          reject(Invalid_OAuth_URI)
+        }
+        if(!server.prefix) {
+          config_internal.authorization = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
+          config_internal.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
+          config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
+          config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
+          config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+          config_internal.createAID = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.create_authid_endpoint_path;
+          config_internal.deleteAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.delete_authid_endpoint_path;
+          config_internal.disableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.disable_authid_endpoint_path;
+          config_internal.downloadAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.enableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.enable_authid_endpoint_path;
+          config_internal.fetchAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.fetch_authid_endpoint_path;
+          config_internal.reissueAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.reissue_authid_endpoint_path;
+          config_internal.resetAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port + oauth_config.custom.mas_authid_endpoints.reset_authid_endpoint_path;
+        }
+        else {
+          config_internal.authorization = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.authorization_endpoint_path;
+          config_internal.oauth_demo_protected_api_endpoint_path = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.oauth_demo_protected_api_endpoint_path;
+          config_internal.tokenRevoke = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.oauth.system_endpoints.token_revocation_endpoint_path;
+          config_internal.getChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.getchallenge_endpoint_path;
+          config_internal.verifyChallenge = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.verifychallenge_endpoint_path;
+          config_internal.createAID = 'https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.create_authid_endpoint_path;
+          config_internal.deleteAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.delete_authid_endpoint_path;
+          config_internal.disableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.disable_authid_endpoint_path;
+          config_internal.downloadAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.download_authid_endpoint_path;
+          config_internal.enableAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.enable_authid_endpoint_path;
+          config_internal.fetchAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.fetch_authid_endpoint_path;
+          config_internal.reissueAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.reissue_authid_endpoint_path;
+          config_internal.resetAID='https://' + oauth_config.server.hostname + ':' +
+            oauth_config.server.port +"/" + server.prefix + oauth_config.custom.mas_authid_endpoints.reset_authid_endpoint_path;
+        }
+        config_internal.state = getNonce();
+        config_internal.scope = config_internal.scope.split(' ');
+        config_internal.profileId = profileId;
+        resolve(config_internal);
+      }
+    };
+    xhttp.open('GET',configURL, true);
+    xhttp.send();
   });
 }

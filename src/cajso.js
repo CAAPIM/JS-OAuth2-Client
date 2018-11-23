@@ -27,6 +27,7 @@ let decryptedToken;
 let isDebug = false; //global debug state
 let configuration = {};
 let server = {};
+let isJSSDKFlag = false;
 
 // we instantiate with the global switch
 let debug;
@@ -34,44 +35,52 @@ let debug;
 const cajso = function()
 {
   //----------- Public Methods -----------//
-  this.init = () => {
+  this.init = (configURL, profileId, isJSSDK) => {
     debug = Debugger(isDebug);
+    isJSSDKFlag = isJSSDK;
     return new Promise((resolve, reject) => {
-      cryptoInit().then(() => {
-        // page handling redirection will also call init, so retrieve token if available
-        // from URL Fragment. In either case, call initCallback...
-        getTokenFromURLFragment().then(
-                  (state) => {
-                    resolve(state);
-                  }, (errObj) => {
-                    reject(errObj);
-                  });
+      getOAuthParams(configURL, profileId).then((config) => {
+        configuration = config;
+        cryptoInit().then(() => {
+          // page handling redirection will also call init, so retrieve token if available
+          // from URL Fragment. In either case, call initCallback...
+          getTokenFromURLFragment().then((state) => {
+            resolve(state);
+          }, (errObj) => {
+            reject(errObj);
+          });
         }, (msg) => {
-          let errObj = CRYPO_ERROR;
+          let errObj = CRYPTO_ERROR;
           errObj.errMsg = msg;
           reject(errObj);
         });
+      }, (errObj) => {
+          reject(errObj);
       });
-    }
+    });
+  }
   // Fetch the token from local storage if available, or do the authorization
   // dance to get a token from auth server...
   this.authorize = (profileId, configMap) =>
     retrieveToken(profileId, configMap);
 
-  this.get = (apiURL, hdrs,params, profileId) =>
-    performHttpOp('GET', apiURL, hdrs,params, profileId);
+  this.loginWithIDToken = (profileId, configMap, idToken) =>
+    retrieveToken(profileId, configMap, idToken);
 
-  this.post = (apiURL,hdrs,params, profileId, postData) =>
-    performHttpOp('POST', apiURL, hdrs,params, profileId, postData);
+  this.get = (apiURL, hdrs,params, profileId, bearer) =>
+    performHttpOp('GET', apiURL, hdrs,params, profileId, bearer);
 
-  this.put = (apiURL, hdrs,params, profileId, putData) =>
-    performHttpOp('PUT', apiURL, hdrs,params, profileId, putData);
+  this.post = (apiURL,hdrs,params, profileId, bearer, postData) =>
+    performHttpOp('POST', apiURL, hdrs,params, profileId, bearer, postData);
 
-  this.patch = (apiURL, hdrs,params, profileId, patchData) =>
-    performHttpOp('PATCH', apiURL, hdrs,params, profileId, patchData);
+  this.put = (apiURL, hdrs,params, profileId, bearer, putData) =>
+    performHttpOp('PUT', apiURL, hdrs,params, profileId, bearer, putData);
 
-  this.delete = (apiURL, hdrs,params, profileId) =>
-    performHttpOp('DELETE', apiURL, hdrs,params, profileId);
+  this.patch = (apiURL, hdrs,params, profileId, bearer, patchData) =>
+    performHttpOp('PATCH', apiURL, hdrs,params, profileId, bearer, patchData);
+
+  this.delete = (apiURL, hdrs,params, profileId, bearer) =>
+    performHttpOp('DELETE', apiURL, hdrs,params, profileId, bearer);
 
   this.isTokenAvailable = profileId =>
   {
@@ -84,6 +93,9 @@ const cajso = function()
 
   this.getState = profileId =>
     getStateFromProfileId(profileId);
+
+  this.getConfig = () =>
+    getConfig();
 
   _jsoclient_instance_ = this;
 };

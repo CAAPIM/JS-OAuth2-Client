@@ -15,14 +15,15 @@
 4. [CA JS OAUTH 2.0 API Reference](#12)
     1. [Load and Initialize the CA JS OAuth 2.0 Client](#13)
     2. [Authorize](#14)
-    3. [HTTP GET Request](#15)
-    4. [HTTP POST Request](#16)
-    5. [HTTP PUT Request](#17)
-    6. [HTTP PATCH Request](#18)
-    7. [HTTP DELETE Request](#19)
-    8. [Remove Token](#20)
-5. [API Error Codes](#21)
-6. [Build the CA JS OAuth 2.0 Client](#22)
+    3. [Login with IDToken](#15)
+    3. [HTTP GET Request](#16)
+    4. [HTTP POST Request](#17)
+    5. [HTTP PUT Request](#18)
+    6. [HTTP PATCH Request](#19)
+    7. [HTTP DELETE Request](#20)
+    8. [Remove Token](#21)
+5. [API Error Codes](#22)
+6. [Build the CA JS OAuth 2.0 Client](#23)
 
 <a name="1"></a>
 ## OAuth 2.0 (Open Authorization) Overview 
@@ -168,7 +169,9 @@ Follow the steps to use the CA JS OAuth 2.0 APIs:
  
 2. Authorize 
 
-3. Make the following HTTP requests:
+3. Login with IDToken
+
+4. Make the following HTTP requests:
 
   a. HTTP GET Request
  
@@ -178,7 +181,7 @@ Follow the steps to use the CA JS OAuth 2.0 APIs:
  
   d. HTTP DELETE Request
 
-8. Remove Token
+5. Remove Token
 
 <a name="13"></a>
 ### Load and Initialize the CA JS OAuth 2.0 Client 
@@ -251,6 +254,48 @@ function authorize()
   ```
 
 <a name="15"></a>
+### Login with IDToken
+
+`jsoClient.loginWithIDToken()`
+
+Obtains the access token using ID Token that is used to access the protected resource.
+The syntax is as follows:
+
+`jsoClient.loginWithIDToken(profileId, configMap, idToken)`
+
+Where:
+
+**profileId**
+
+Defines the profile name for which the OAuth authorization starts. CAll this API after the successful authorization of the client.
+
+**configMap**
+
+Specifies a map of the OAuth2.0 parameters to start the authorization process.
+
+**idToken**
+
+Specifies a token that is used to get an OAuth access token during authorization process.
+
+A sample code is as follows:
+
+```
+var configMap = {
+                  client_id : configurationObj.client_id,
+                  client_secret: configurationObj.client_secret,
+                  redirect_uri : configurationObj.redirect_uri,
+                  auth_url : configurationObj.authorization,
+                  scope : configurationObj.scope,
+                  state : configurationObj.state
+              };
+var profileId = “RAS”;
+var idToken = token; // Which will get on successful auth id verification 
+
+jsoClient.loginWithIDToken(, configMap, idToken)
+
+  ```
+
+<a name="16"></a>
 ### HTTP GET Request 
 
 `jsoClient.get()` 
@@ -301,7 +346,7 @@ profileId).then(
     );
 ```
 
-<a name="16"></a>
+<a name="17"></a>
 ### HTTP POST Request 
 
 `jsoClient.post()`
@@ -358,7 +403,7 @@ postData).then (
     );
 ```
 
-<a name="17"></a>
+<a name="18"></a>
 ### HTTP PUT Request 
 
 `jsoClient.put()`
@@ -416,7 +461,7 @@ putData).then (
     );
 ```
 
- <a name="18"></a>
+ <a name="19"></a>
 ### HTTP PATCH Request 
 
 `jsoClient.patch()`
@@ -473,7 +518,7 @@ patchData).then (
     );
  ```
  
-<a name="19"></a>
+<a name="20"></a>
 ### HTTP DELETE Request 
 
 `jsoClient.delete()`
@@ -524,7 +569,7 @@ profileId).then (
     );
 ```
 
-<a name="20"></a>
+<a name="21"></a>
 ### Remove Token 
 
 `jsoClient.revokeToken()`
@@ -559,7 +604,7 @@ jsoClient.revokeToken(revokeConfigMap) .then (
 }
 ```
 
-<a name="21"></a>
+<a name="22"></a>
 ## API Error Codes 
 
 The following list defines the API error code and the reason why the error occurred:
@@ -575,7 +620,7 @@ Error code | Description
 -1007 | Requested API does not exist
 -1008 | Bad request or invalid input
 
- <a name="22"></a>
+ <a name="23"></a>
 ## Build the CA JS OAuth 2.0 Client 
 Follow the steps to build the CA JS OAuth 2.0 Client:
 
